@@ -1,0 +1,522 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#article",
+        "isPartOf": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/"
+        },
+        "author": {
+          "name": "swasthi",
+          "@id": "https://www.indianhealthyrecipes.com/#/schema/person/2d7d264cdc5dc6602ee06a087cd3fcb0"
+        },
+        "headline": "Chicken Tikka Masala Recipe",
+        "datePublished": "2022-06-17T01:20:00+00:00",
+        "dateModified": "2024-05-09T05:41:08+00:00",
+        "wordCount": 3383,
+        "commentCount": 579,
+        "publisher": {
+          "@id": "https://www.indianhealthyrecipes.com/#organization"
+        },
+        "image": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#primaryimage"
+        },
+        "thumbnailUrl": "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-recipe.jpg",
+        "articleSection": [
+          "Chicken Recipes",
+          "Hyderabadi recipes",
+          "Latest",
+          "Non-vegetarian Recipes"
+        ],
+        "inLanguage": "en-US",
+        "potentialAction": [
+          {
+            "@type": "CommentAction",
+            "name": "Comment",
+            "target": [
+              "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#respond"
+            ]
+          }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/",
+        "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/",
+        "name": "Chicken Tikka Masala Recipe - Swasthi&#039;s Recipes",
+        "isPartOf": {
+          "@id": "https://www.indianhealthyrecipes.com/#website"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#primaryimage"
+        },
+        "image": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#primaryimage"
+        },
+        "thumbnailUrl": "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-recipe.jpg",
+        "datePublished": "2022-06-17T01:20:00+00:00",
+        "dateModified": "2024-05-09T05:41:08+00:00",
+        "description": "Chicken tikka masala is a popular curried dish made with boneless chicken, ground spices, onions, tomatoes, cream and herbs",
+        "breadcrumb": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#breadcrumb"
+        },
+        "inLanguage": "en-US",
+        "potentialAction": [
+          {
+            "@type": "ReadAction",
+            "target": [
+              "https://www.indianhealthyrecipes.com/chicken-tikka-masala/"
+            ]
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "inLanguage": "en-US",
+        "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#primaryimage",
+        "url": "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-recipe.jpg",
+        "contentUrl": "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-recipe.jpg",
+        "width": 1200,
+        "height": 1800,
+        "caption": "chicken tikka masala"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.indianhealthyrecipes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Recipes",
+            "item": "https://www.indianhealthyrecipes.com/recipes/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Chicken Recipes",
+            "item": "https://www.indianhealthyrecipes.com/recipes/chicken-recipes/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Chicken Tikka Masala Recipe"
+          }
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.indianhealthyrecipes.com/#website",
+        "url": "https://www.indianhealthyrecipes.com/",
+        "name": "Swasthi&#039;s Recipes",
+        "description": "Authentic Indian Recipes by Swasthi",
+        "publisher": {
+          "@id": "https://www.indianhealthyrecipes.com/#organization"
+        },
+        "potentialAction": [
+          {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.indianhealthyrecipes.com/?s={search_term_string}"
+            },
+            "query-input": {
+              "@type": "PropertyValueSpecification",
+              "valueRequired": true,
+              "valueName": "search_term_string"
+            }
+          }
+        ],
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.indianhealthyrecipes.com/#organization",
+        "name": "SWASTHI'S RECIPES",
+        "url": "https://www.indianhealthyrecipes.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "inLanguage": "en-US",
+          "@id": "https://www.indianhealthyrecipes.com/#/schema/logo/image/",
+          "url": "https://www.indianhealthyrecipes.com/wp-content/uploads/2019/06/Swasthis-Recipes-Organization-Logo.png",
+          "contentUrl": "https://www.indianhealthyrecipes.com/wp-content/uploads/2019/06/Swasthis-Recipes-Organization-Logo.png",
+          "width": 1024,
+          "height": 1024,
+          "caption": "SWASTHI'S RECIPES"
+        },
+        "image": {
+          "@id": "https://www.indianhealthyrecipes.com/#/schema/logo/image/"
+        },
+        "sameAs": [
+          "https://www.facebook.com/swasthisrecipes",
+          "https://x.com/SwasthisRecipes",
+          "https://www.instagram.com/swasthisrecipes/",
+          "https://www.pinterest.com/swasthi/",
+          "https://www.youtube.com/+indianhealthyrecipes"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.indianhealthyrecipes.com/#/schema/person/2d7d264cdc5dc6602ee06a087cd3fcb0",
+        "name": "swasthi",
+        "description": "I’m Swasthi Shreekanth, the recipe developer, food photographer &amp; food writer behind Swasthi's Recipes. My aim is to help you cook great Indian food with my time-tested recipes. After 2 decades of experience in practical Indian cooking I started this blog to help people cook better &amp; more often at home. Whether you are a novice or an experienced cook I am sure Swasthi’s Recipes will assist you to enhance your cooking skills. Read more.."
+      },
+      {
+        "@type": "Recipe",
+        "name": "Chicken Tikka Masala Recipe",
+        "author": {
+          "@id": "https://www.indianhealthyrecipes.com/#/schema/person/2d7d264cdc5dc6602ee06a087cd3fcb0"
+        },
+        "description": "Chicken tikka masala is a classic Indian/British dish with soft tender chunks of grilled chicken in a delicious &amp; super aromatic gravy. This recipe will give you the best! Serve it with Butter naan or with Basmati rice.",
+        "datePublished": "2022-06-17T01:20:00+00:00",
+        "image": [
+          "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala.jpg",
+          "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-500x500.jpg",
+          "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-500x375.jpg",
+          "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/06/chicken-tikka-masala-480x270.jpg"
+        ],
+        "video": {
+          "name": "Chicken Tikka Masala Recipe",
+          "description": "Chicken tikka masala is a world popular Curried dish of grilled chicken cooked in a spicy and delicious sauce. For complete written recipe, you may check my blog link here:\nhttps://www.indianhealthyrecipes.com/chicken-tikka-masala/",
+          "uploadDate": "2022-06-26T12:47:23+00:00",
+          "duration": "PT3M26S",
+          "thumbnailUrl": "https://i.ytimg.com/vi/1rPo1qDNQVg/hqdefault.jpg",
+          "embedUrl": "https://www.youtube.com/embed/1rPo1qDNQVg?feature=oembed",
+          "contentUrl": "https://www.youtube.com/watch?v=1rPo1qDNQVg",
+          "@type": "VideoObject"
+        },
+        "recipeYield": [
+          "6"
+        ],
+        "prepTime": "PT20M",
+        "cookTime": "PT40M",
+        "totalTime": "PT60M",
+        "recipeIngredient": [
+          "1½ lbs. (700 grams)  chicken boneless ((Preferably thighs, or breasts))",
+          "½ cup (120 ml)  Greek yogurt ((hung curd))",
+          "½ to 1 teaspoon Kashmiri red chili powder ((use less for low heat, use 1½ teaspoons for extra heat))",
+          "1 teaspoon garam masala",
+          "¼ teaspoon turmeric",
+          "1 teaspoon coriander powder",
+          "½ teaspoon cumin powder",
+          "½ teaspoon salt",
+          "1 tablespoon lemon juice",
+          "1 tablespoon kasuri methi",
+          "1 tablespoon ginger garlic paste ((or ¾ tbsp grated ginger + ¾ tbsp grated garlic))",
+          "1 tablespoon oil ((mustard oil if you have))",
+          "3 tablespoons oil ((or ghee))",
+          "1½ cups (150 grams)  onions  ((fine chopped, 1x - 1 large or 2 medium))",
+          "1  green chilli ((optional))",
+          "1 teaspoon salt",
+          "1 tablespoon ginger garlic paste ((or ¾ tbsp grated ginger + ¾ tbsp grated garlic))",
+          "½ to 1 teaspoon Kashmiri red chili powder ((can use up to 1 tablespoon for extra heat))",
+          "2 teaspoons garam masala ((adjust to taste))",
+          "1 tablespoon coriander powder",
+          "1 to 1½ teaspoon cumin powder",
+          "1 to 2 teaspoons sugar ((adjust to taste))",
+          "1.1 lbs. (500 grams)   tomatoes ((pureed/chopped or 10 oz. (1¼ cup) tomato puree/ passata or 14 oz can peeled tomatoes, read notes))",
+          "1  cup hot water ((double if using cashews))",
+          "1 tablespoon kasuri methi ((dried fenugreek leaves))",
+          "½ cup heavy cream/whipping cream ((or 1x - ⅓ cup whole raw cashews, 30, refer notes))",
+          "3 tablespoons heavy cream ((or any cream))",
+          "3 tablespoons coriander leaves ((fine chopped))"
+        ],
+        "recipeInstructions": [
+          {
+            "@type": "HowToSection",
+            "name": "Chicken Marinade",
+            "itemListElement": [
+              {
+                "@type": "HowToStep",
+                "text": "Cube chicken to 1 to 1½ inch pieces. Add them to a mixing bowl. Make sure there is no excess moisture in your chicken. If you want you may pat dry with a few kitchen tissues.",
+                "name": "Cube chicken to 1 to 1½ inch pieces. Add them to a mixing bowl. Make sure there is no excess moisture in your chicken. If you want you may pat dry with a few kitchen tissues.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-0-0"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Add red chilli powder, garam masala, cumin powder, coriander powder, turmeric, salt, lemon juice, oil, ginger garlic paste, yogurt and kasuri methi. Skip the lemon juice if your yogurt is sour.",
+                "name": "Add red chilli powder, garam masala, cumin powder, coriander powder, turmeric, salt, lemon juice, oil, ginger garlic paste, yogurt and kasuri methi. Skip the lemon juice if your yogurt is sour.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-0-1"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Mix well. Cover with a cling wrap and refrigerate for minimum of 8 hours and up to 48 hours. If you are in a rush, you may cut down to 3 hours.",
+                "name": "Mix well. Cover with a cling wrap and refrigerate for minimum of 8 hours and up to 48 hours. If you are in a rush, you may cut down to 3 hours.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-0-2"
+              }
+            ]
+          },
+          {
+            "@type": "HowToSection",
+            "name": "Make Tikka Sauce",
+            "itemListElement": [
+              {
+                "@type": "HowToStep",
+                "text": "Heat oil or ghee in a pot or pan. Add onions and sprinkle 1 teaspoon salt. Saute until deep golden.",
+                "name": "Heat oil or ghee in a pot or pan. Add onions and sprinkle 1 teaspoon salt. Saute until deep golden.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-0"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Add ginger garlic paste and green chilli. Saute until aromatic, for 40 to 60 seconds.",
+                "name": "Add ginger garlic paste and green chilli. Saute until aromatic, for 40 to 60 seconds.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-1"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Reduce the heat to low. Add red chilli powder, coriander powder, garam masala and cumin powder. Stir well quickly.",
+                "name": "Reduce the heat to low. Add red chilli powder, coriander powder, garam masala and cumin powder. Stir well quickly.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-2"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Add the tomatoes and cook on a medium high heat until the onion tomato masala becomes really thick. (If using fresh tomatoes, it takes about 7 to 8 mins and tomato puree/passata takes only 2 minutes)",
+                "name": "Add the tomatoes and cook on a medium high heat until the onion tomato masala becomes really thick. (If using fresh tomatoes, it takes about 7 to 8 mins and tomato puree/passata takes only 2 minutes)",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-3"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Pour hot water and mix well. Bring to a rolling boil and cover. Simmer until thick, for about 12 to 14 mins.",
+                "name": "Pour hot water and mix well. Bring to a rolling boil and cover. Simmer until thick, for about 12 to 14 mins.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-4"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Optional - Cool down and blend to a smooth puree. Return it to the pot and heat up. This step cuts down the acidity from canned tomatoes.",
+                "name": "Optional - Cool down and blend to a smooth puree. Return it to the pot and heat up. This step cuts down the acidity from canned tomatoes.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-1-5"
+              }
+            ]
+          },
+          {
+            "@type": "HowToSection",
+            "name": "How to Make Chicken Tikka Masala",
+            "itemListElement": [
+              {
+                "@type": "HowToStep",
+                "text": "Grill in Oven : While the gravy simmers, thread the chicken to the metal skewers or soaked bamboo skewers and place them in a prepared tray. Bake them in a preheated oven at 460 F or 240 C for 9 to 10 mins. Turn them to the other side with a tong and grill then for another 9 to 10 mins. To char the chicken, broil for 2 to 3 mins or until slightly charred.",
+                "name": "Grill in Oven : While the gravy simmers, thread the chicken to the metal skewers or soaked bamboo skewers and place them in a prepared tray. Bake them in a preheated oven at 460 F or 240 C for 9 to 10 mins. Turn them to the other side with a tong and grill then for another 9 to 10 mins. To char the chicken, broil for 2 to 3 mins or until slightly charred.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-0"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Or In a Skillet: Pour 1 tbsp oil to a skillet and heat it well. Place the chicken tikka one by one, spacing them apart. Cook on a medium high heat for 3 mins, turn them to the other side with a tong and cook for another 3 mins, until charred and   not essentially fully cooked. Remove to a plate and Cook in batches.",
+                "name": "Or In a Skillet: Pour 1 tbsp oil to a skillet and heat it well. Place the chicken tikka one by one, spacing them apart. Cook on a medium high heat for 3 mins, turn them to the other side with a tong and cook for another 3 mins, until charred and   not essentially fully cooked. Remove to a plate and Cook in batches.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-1"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Or In the Air fryer: Thread on skewers and place them in the basket or in the tray. Air fry for 6 mins, at 400 F or 200 C. Turn them with tongs and air fry for another 6 mins. If they dry out, you may baste with marinade and continue for another 2 mins, until slightly charred.",
+                "name": "Or In the Air fryer: Thread on skewers and place them in the basket or in the tray. Air fry for 6 mins, at 400 F or 200 C. Turn them with tongs and air fry for another 6 mins. If they dry out, you may baste with marinade and continue for another 2 mins, until slightly charred.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-2"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "After 12 to 14 mins of simmering the tikka masala sauce, add sugar and the cream (or cashew cream, check notes to make your own). Stir well and cook for a few minutes until thick, creamy and aromatic. (Check video for consistency)",
+                "name": "After 12 to 14 mins of simmering the tikka masala sauce, add sugar and the cream (or cashew cream, check notes to make your own). Stir well and cook for a few minutes until thick, creamy and aromatic. (Check video for consistency)",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-3"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Add the grilled chicken tikka and crushed kasuri methi. (Make sure your gravy has reached a thick gravy consistency/serving consistency, before adding chicken). Stir and cook for 2 to 3 mins until chicken tikka is soft and tender. Taste test and add more salt, garam masala and sugar if needed.",
+                "name": "Add the grilled chicken tikka and crushed kasuri methi. (Make sure your gravy has reached a thick gravy consistency/serving consistency, before adding chicken). Stir and cook for 2 to 3 mins until chicken tikka is soft and tender. Taste test and add more salt, garam masala and sugar if needed.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-4"
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Turn off and garnish with cream and coriander leaves. Serve chicken tikka masala with Butter Naan, roti, paratha, Basmati rice or Jeera rice.",
+                "name": "Turn off and garnish with cream and coriander leaves. Serve chicken tikka masala with Butter Naan, roti, paratha, Basmati rice or Jeera rice.",
+                "url": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#wprm-recipe-38936-step-2-5"
+              }
+            ]
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.99",
+          "ratingCount": "578",
+          "reviewCount": "11"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "I'm stunned at how well this turned out. My husband flame grilled the chicken tikka while I made the masala. It was a lovely experience and this was my first time being able to create a Indian dish so well. Wish I could upload the pictures. Thank you for being a fabulous guide..",
+            "author": {
+              "@type": "Person",
+              "name": "Elena"
+            },
+            "datePublished": "2025-07-15"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "I made this chicken tikka masala and my family says they have never eaten a Indian meal as delicious as this. Didn't have to change anything except to use smoked paprika and a little more heavy cream. Thank you for the well written recipes",
+            "author": {
+              "@type": "Person",
+              "name": "Lisa"
+            },
+            "datePublished": "2025-07-14"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Thank you so much for this recipe, easy to follow, helpful photos. Trusted the process and the result was spot on.",
+            "author": {
+              "@type": "Person",
+              "name": "Jon"
+            },
+            "datePublished": "2025-07-10"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Fantastic and easy to follow recipe.",
+            "author": {
+              "@type": "Person",
+              "name": "Ollie"
+            },
+            "datePublished": "2025-07-07"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Is grilling on a gas grill worse or better than grilling in the oven?",
+            "author": {
+              "@type": "Person",
+              "name": "Ben Davis"
+            },
+            "datePublished": "2025-06-27"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "I have a question, I’m using tomato puree, do I still use 1 1/4 cup of it no matter how many servings (such as 3,4 or. 5) i picked for making 1x of the recipe?",
+            "author": {
+              "@type": "Person",
+              "name": "Zinia Rehman"
+            },
+            "datePublished": "2025-06-26"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "My sauce was a bit gritty from the spices, not sure what I did wrong there, but the flavor was so delicious!",
+            "author": {
+              "@type": "Person",
+              "name": "Natasha"
+            },
+            "datePublished": "2025-06-24"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Very delicious and authentic. My family love it and I love making it for company. It is a WOW!",
+            "author": {
+              "@type": "Person",
+              "name": "Grace Chadwick"
+            },
+            "datePublished": "2025-06-21"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Have made a few times now, didn't stray from recipie. Absolutely delicious!!!!\r\nThank you!",
+            "author": {
+              "@type": "Person",
+              "name": "Ed Brown"
+            },
+            "datePublished": "2025-06-20"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "Made this for dinner today and it was absolutely delicious! I only had chicken tenderloins, so that’s what I used, but wow it was extremely flavorful and easy to prepare. Family loved it. Will definitely be my go-to recipe for this dish. Thank you for a wonderful recipe!",
+            "author": {
+              "@type": "Person",
+              "name": "Jennifer"
+            },
+            "datePublished": "2025-06-19"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            },
+            "reviewBody": "I've made this many times and I love it more each and every time. I currently have a huge batch of chicken marinating for tomorrow! This time I'll try adding the bay leaf, cardamom, clove, and cinnamon to the ghee as you mentioned in your notes. Should I remove these after, or should they be blended along with the sauce?",
+            "author": {
+              "@type": "Person",
+              "name": "Lexx"
+            },
+            "datePublished": "2025-06-10"
+          }
+        ],
+        "recipeCategory": [
+          "Main"
+        ],
+        "recipeCuisine": [
+          "North Indian"
+        ],
+        "keywords": "Chicken tikka masala",
+        "nutrition": {
+          "@type": "NutritionInformation",
+          "calories": "483 kcal",
+          "carbohydrateContent": "10 g",
+          "proteinContent": "26 g",
+          "fatContent": "38 g",
+          "saturatedFatContent": "12 g",
+          "cholesterolContent": "120 mg",
+          "sodiumContent": "728 mg",
+          "fiberContent": "2 g",
+          "sugarContent": "6 g",
+          "transFatContent": "0.2 g",
+          "unsaturatedFatContent": "23 g",
+          "servingSize": "1 serving"
+        },
+        "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#recipe",
+        "isPartOf": {
+          "@id": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/#article"
+        },
+        "mainEntityOfPage": "https://www.indianhealthyrecipes.com/chicken-tikka-masala/"
+      }
+    ]
+  }
+]
