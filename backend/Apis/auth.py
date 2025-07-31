@@ -1,4 +1,5 @@
 from email.policy import HTTP
+from hashlib import algorithms_guaranteed
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -20,7 +21,7 @@ JWT_PASSWORD = os.getenv("JWT_PASSWORD", "password")
 
 router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token") #this is where we are able to identify where the JWT is in our code 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login") #this is where we are able to identify where the JWT is in our code 
 
 #Creating password context, way for us to hash our passwords in the future
 pass_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -57,7 +58,7 @@ def register_user(user: UserCreate, db: Session =Depends(get_db)):
 
 #Authenticate the user
 def authenticate_user(username: str, password: str, db:Session):
-    user = db.query(User).filter(User.username == username)
+    user = db.query(User).filter(User.username == username).first()
     if not user:
         return False #username doesn't match in database
     if not pass_context.verify(password, user.hashed_password):
@@ -78,7 +79,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 #creating a new post for our token
-@router.post("/token")
+@router.post("/login")
 def login_for_access_token(form_data: OAuth2PasswordRequestForm =Depends(), db: Session = Depends(get_db)):
     user=authenticate_user(form_data.username, form_data.password, db)
     if not user:
@@ -95,7 +96,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm =Depends(), db: 
 
 def verify_token(token: str= Depends(oauth2_scheme)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithm=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise HTTPException(status_code=403, detail="Token is invalid or expired")
@@ -103,7 +104,7 @@ def verify_token(token: str= Depends(oauth2_scheme)):
     except JWTError:
         raise HTTPException(status_code =403, detail="Token is invalid or expired")
 
-@router.get("verify-token/{token}")
-async def verify_user_token(token: str):
+@router.post("/verify-token")
+def verify_user_token(token: str = Depends(oauth2_scheme)):
     verify_token(token=token)
     return {"message": "Token is valid"}

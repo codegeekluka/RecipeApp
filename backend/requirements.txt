@@ -22,10 +22,10 @@ extruct==0.18.0            # Web scraping metadata extraction
 # =====================
 # Authentication & Security
 # =====================
-passlib                    # Password hashing (auth)
+passlib ==1.7.4                    # Password hashing (auth)
 python-jose                # JWTs (auth/authorization)
 cryptography               # Crypto primitives (used by python-jose, passlib)
-bcrypt                     # Password hashing algorithm (used by passlib)
+bcrypt==4.0.1                     # Password hashing algorithm (used by passlib)
 
 # =====================
 # Utilities/Other

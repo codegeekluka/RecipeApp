@@ -2,14 +2,38 @@ import RecipeCard from '../components/RecipeCard.jsx'
 import '../styles/Home.css'
 import { useNavigate } from 'react-router-dom';
 import { useRecipesContext } from '../contexts/RecipeContext.jsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Home = () => {
+
+
   const { recipes } = useRecipesContext()
   const [inputValue, setInputValue] = useState('')
   
-
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const verifyToken = async() => {
+      const token = localStorage.getItem('token');
+      
+      try {
+        const response = await fetch(`http://localhost:8000/verify-token`,{
+          method: 'POST',
+          headers: {
+          'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if(!response.ok){
+          throw new Error('Token verification failed');
+        }
+      }catch (err){
+          localStorage.removeItem('token');
+          navigate('/')
+      }
+    }
+    verifyToken();
+  }, [navigate])
 
   const handleCardClick = (id) =>{
     navigate(`/recipe/${id}`)

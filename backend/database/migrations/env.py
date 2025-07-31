@@ -4,7 +4,14 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+import sys
+import os
+from dotenv import load_dotenv
+# Go up two levels to get to where .env is (relative to migrations/)
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(dotenv_path=env_path)
 
+from backend.database.config import DATABASE_URL
 from backend.database.db_models import Base
 
 # this is the Alembic Config object, which provides
@@ -40,7 +47,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = DATABASE_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,

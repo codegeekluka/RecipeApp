@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from sqlalchemy.engine.url import URL
 
 # Load variables from .env file
-load_dotenv()
+# Assumes .env is in the same folder as config.py
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
 
 # Environment variables
 DATABASE_USER = os.getenv("DB_USER", "postgres")
