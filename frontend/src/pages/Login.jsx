@@ -1,4 +1,5 @@
 import axios from "axios"
+import '../styles/Login.css'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -55,34 +56,48 @@ const Login = () => {
     }
 
     return(
-        <div>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <h2>Login</h2>
-                </div>
-                <div className="username-container">
-                    <label htmlFor="username"></label>
-                    <input value={username} onChange={(e)=>setUsername(e.target.value)} id="username" className="username-input" type="text" placeholder="Type your username"/>
-                </div>
-                <div className="password-container">
-                    <label htmlFor="password"></label>
-                    <input value={password} onChange={(e)=>setPassword(e.target.value)} id="password" className="username-input" type="password" placeholder="Type your password"/>
-                </div>
-                {error && (
+        <div className="login-container">
+            <div className="login-form-wrapper" >
+                <h2 className="login-title">Cheffy Login</h2>
+                <form onSubmit={handleLogin}>
+                    <input
+                    className="input-login"
+                    value={username} 
+                    onChange={(e)=>{
+                        setUsername(e.target.value)
+                        setError('')
+                    }} 
+                    id="username" 
+                    type="text"
+                    placeholder="username"
+                    />
+                    <input 
+                    className="input-login-pass" 
+                    value={password} 
+                    onChange={(e)=> {
+                    setPassword(e.target.value)
+                    setError('')
+                    }} 
+                    id="password" 
+                    type="password" 
+                    placeholder="password"
+                    />
                     <div className="login-err">
-                        <p>{error}</p>
-                </div>)}
-                <div className="register-link">
-                    <p>hi</p>
-                    {/*<Link to="">Register</Link>*/}
-                </div>
-                <div className="button-container">
-                    <button type="submit" disabled={loading} className="login-btn">{loading ?
+                    <p className="login-err-msg" style={{ visibility: error ? "visible" : "hidden", color: "red" }}>
+                            {error || "placeholder"}
+                        </p>
+                    </div>
+                    <div className="button-container">
+                        <button className="login-btn" type="submit" disabled={loading}>{loading ?
                     "Logging in..." : "Login"}</button>
-                </div>
-            </form>
+                    </div>
+                </form>
+                <p className="register-link">
+                    <a href="/register">Create new account</a>
+                </p>
+            </div>
         </div>
-    )
+    );
 }
 
 export default Login

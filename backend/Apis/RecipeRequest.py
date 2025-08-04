@@ -19,3 +19,4 @@ def parse_recipe(req: RecipeRequest):
         return JSONResponse(content={"recipe": recipe}) #return on success
     except Exception as e :
         raise HTTPException(status_code = 400, detail=str(e))
+

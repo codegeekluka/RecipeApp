@@ -1,15 +1,19 @@
 import RecipeCard from '../components/RecipeCard.jsx'
 import '../styles/Home.css'
+import Login from './Login.jsx'
 import { useNavigate } from 'react-router-dom';
 import { useRecipesContext } from '../contexts/RecipeContext.jsx'
 import { useState, useEffect } from 'react'
+import ScrapeWebsiteBtn from '../components/ScrapeWebsiteBtn.jsx'
+
 
 const Home = () => {
 
 
   const { recipes } = useRecipesContext()
-  const [inputValue, setInputValue] = useState('')
   
+  const [loading, setLoading] =useState(true)
+
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -27,6 +31,7 @@ const Home = () => {
         if(!response.ok){
           throw new Error('Token verification failed');
         }
+      setLoading(false);
       }catch (err){
           localStorage.removeItem('token');
           navigate('/')
@@ -35,55 +40,34 @@ const Home = () => {
     verifyToken();
   }, [navigate])
 
+  
+
+
   const handleCardClick = (id) =>{
     navigate(`/recipe/${id}`)
   }
 
-  const scrapeWebsite = async () =>{
-    //need to send request to our FastAPI backend, running on port 8000
-    const response = await fetch('http://localhost:8000/RecipePage', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ url: inputValue }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data)
-    } else {
-      console.error("Failed to extract recipe");
-    }
-
-
-  }
+  
+  
 
   return (
     <div className="home">
-        <div className="top-section">
-          <input
-          type="text"
-          className="enter-recipe"  
-          placeholder="Enter URL" 
-          value={inputValue}
-          onChange={(e)=> setInputValue(e.target.value)}
-          />
-          <button onClick={scrapeWebsite}>➔</button>
-          <h2>Your Recipes</h2>
-          <div className="recipe-list">
-            {recipes.map(recipe => (
-              <RecipeCard
-              key={recipe.id}
-              recipe={recipe}
-              onClick={()=> handleCardClick(recipe.id)}
-              />
-            ))}
-          </div>
-      </div>
-      <hr className="divider" />
-      <div className="add-recipe">
-        <button className="insert-recipe-btn">Add Recipe</button>
-      </div>
+        <div className="add-recipe">
+          <ScrapeWebsiteBtn />
+            <button className="insert-recipe-btn">Add own recipe</button>
+        </div>
+        <hr className="divider" />
+        <h2>Your Recipes</h2>
+        <div className="recipe-list">
+          {recipes.map(recipe => (
+            <RecipeCard
+            key={recipe.id}
+            recipe={recipe}
+            onClick={()=> handleCardClick(recipe.id)}
+            />
+          ))}
+        </div>
+      
     </div>
   )
 }

@@ -7,8 +7,9 @@ from alembic import context
 import sys
 import os
 from dotenv import load_dotenv
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Go up two levels to get to where .env is (relative to migrations/)
-env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+env_path = os.path.join(os.path.dirname(__file__), '..','backend','database', '.env')
 load_dotenv(dotenv_path=env_path)
 
 from backend.database.config import DATABASE_URL
@@ -17,6 +18,8 @@ from backend.database.db_models import Base
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+config.set_main_option("sqlalchemy.url", str(DATABASE_URL))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -47,9 +50,9 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = DATABASE_URL
+    
     context.configure(
-        url=url,
+        url=str(DATABASE_URL),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

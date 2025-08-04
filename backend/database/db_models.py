@@ -45,39 +45,34 @@ class User(BaseModel):
 class Instruction(BaseModel):
     __tablename__ = "instruction"
 
-    step_number = Column("step_number", Integer)
     description = Column("description", String)
     recipe_id = Column(ForeignKey("recipe.id", ondelete="CASCADE"))
 
     # Relationship back to Recipe
     recipe = relationship("Recipe", back_populates="instruction_list")
 
-    def __init__(self, step_number, description):
-        self.step_number = step_number
+    def __init__(self, description):
         self.description = description
     
     def __repr__(self):
-        return f"Step {self.step_number}: {self.description}"
+        return f"{self.description}"
 
 
 class Ingredient(BaseModel):
     __tablename__ = "ingredient"
 
-    name = Column("name", String)
-    quantity = Column("quantity", String)
-    unit = Column("unit", String)
+    ingredient = Column("ingredient", String)
     recipe_id = Column(ForeignKey("recipe.id", ondelete="CASCADE"))
 
     # Relationship back to Recipe
     recipe = relationship("Recipe", back_populates="ingredient_list")
 
-    def __init__(self, name, quantity, unit):
-        self.name = name
-        self.quantity = quantity
-        self.unit = unit
+    def __init__(self, ingredient):
+        self.ingredient = ingredient
+        
     
     def __repr__(self):
-        return f"{self.quantity} {self.unit} {self.name}"
+        return f"{self.ingredient}"
 
 
 #Base.metadata.create_all(bind=engine) takes all classes that extends from base and creates them in the database, used for prototyping, ill uses alembic

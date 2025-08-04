@@ -1,0 +1,140 @@
+
+  
+  /* Container with gradient background, centering content */
+  /*colors: 6B9071,AEC3B0,375534,0F2A1D */
+
+  .signup-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #F5EBFA 0%, #49225B 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    
+  }
+  
+  /* Form wrapper with white background and shadow */
+  
+  .signup-form-wrapper {
+    background: #F5EBFA;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px #0F2A1D;
+    width: 320px;
+    text-align: center;
+    
+  }
+  
+  /* Title styling */
+  
+  .signup-title {
+    color: black;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+  
+    /* Inputs styling */
+    /* Ensures the form stays same height by reserving hint space */
+  .hint-box {
+    min-height: 70px; /* adjust as needed */
+    margin-top: 4px;
+    text-align: left;
+  }
+
+  /* Hint item styling */
+  .password-hint {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #444;
+  }
+
+  .password-hint span {
+    margin-left: 6px;
+  }
+
+  /* Remove default list styles */
+  ul.no-bullets {
+    list-style: none;
+    padding-left: 0;
+    margin: 0px 0 0 0;
+  }
+
+
+  .input, .input-err {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border: 1px solid rgb(167, 166, 166);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+
+
+
+  .err-wrapper {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .sign-up-err {
+    margin: 2px;
+    font-size: 0.8rem;
+    
+
+  }
+
+  .input-err {
+    border: 1.5px solid rgb(238, 10, 10);
+  }
+  
+  
+  .input:focus {
+    outline: none;
+    border: 1.5px solid #0e0c0c;
+  }
+  
+  /* Button styling */
+  
+  .signup-btn {
+    width: 100%;
+    margin-top: 35px;
+    padding: 14px;
+    background-color: #F5EBFA;
+    color: black;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border:1px solid rgb(167, 166, 166); 
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .signup-btn:hover {
+    background-color: #6E3482;
+    color: white;
+    transition: 0.4s;
+  }
+  
+  /* Register text */
+  
+  .login-link {
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .login-link a {
+    color: #0e0c0c;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  
