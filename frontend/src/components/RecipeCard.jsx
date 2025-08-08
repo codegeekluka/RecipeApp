@@ -1,17 +1,19 @@
 import '../styles/RecipeCard.css';
-import { useRecipesContext } from '../contexts/RecipeContext.jsx'
+import { AuthContext } from '../contexts/AuthContext';
+import { useContext } from 'react';
 
 
 const RecipeCard = ({recipe, onClick }) => {
-  const { recipes } = useRecipesContext()
-  
+  const { recipes } = useContext(AuthContext)
   return (
     <div className="recipe-card" onClick={onClick}>
       <div className="recipe-image-container">
-        <img className="recipe-image" src={recipe.image} alt={recipe.name} />
+        <img className="recipe-image" src={recipe.image || '/public/pexels-valeriya-842571.jpg'} alt={recipe.title} />
       </div>
-      <h3 className="recipe-title">{recipe.name}</h3>
-      <p className="recipe-description">{recipe.description}</p>
+      <h3 className="recipe-title">{recipe.title}</h3>
+      <p className="recipe-description">
+        {recipe.description.split(" ").slice(0, 10).join(" ")}...
+      </p>
     </div>
     );
 }

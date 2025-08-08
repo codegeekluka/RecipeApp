@@ -18,7 +18,11 @@
 
   .login-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #49225B 0%, #F5EBFA 100%);
+    /*background: linear-gradient(135deg, #49225B 0%, #F5EBFA 100%);*/
+    background-image: url('/public/pexels-ella-olsson-572949-1640774.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;

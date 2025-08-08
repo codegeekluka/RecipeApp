@@ -1,34 +1,67 @@
 import { useState } from 'react'
 import '../styles/ScrapeButton.css'
+import { useNavigate } from 'react-router-dom'
 
 const ScrapeWebsiteBtn = () => {
     const [showModal, setShowModal] = useState(false);
     const [inputValue, setInputValue] = useState('') 
     const [error, setError] = useState('')
+
+    const navigate = useNavigate()
     
+    const isValidUrl = (string) => {
+        try {
+          const url = new URL(string);
+          return url.protocol === "http:" || url.protocol === "https:";
+        } catch (_) {
+          return false;
+        }
+      };
+      
+
     const scrapeWebsite = async () =>{
-        const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$/;
-        if (!urlPattern.test(inputValue.trim())) {
+        if (!isValidUrl(inputValue.trim())) {
             setError("Please enter a valid URL");
             return;
         }
+          
         console.log("Entered URL:", inputValue);
         handleClose()
-        //need to send request to our FastAPI backend, running on port 8000
-        const response = await fetch('http://localhost:8000/RecipePage', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ url: inputValue }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data)
-        } else {
-          console.error("Failed to extract recipe");
-        }
+        try{
+            const token = localStorage.getItem('token');
+             //need to send request to our FastAPI backend, running on port 8000
+            const response = await fetch('http://localhost:8000/RecipePage', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ url: inputValue }),
+           });
 
+            if (!response.ok) {
+              const error = await response.json();
+              if (response.status === 401 || response.status === 403){
+                localStorage.removeItem('token')
+                console.error("Failed to extract recipe: ",error.detail);
+                navigate('/')
+            } else {
+            console.error("Failed to extract recipe: ", error.detail);
+            alert(`Error: ${error.detail || "Failed to scrape recipe."}`);
+            }
+            return;
+          }
+
+          const data = await response.json();
+          const recipeSlug = data.slug
+        
+          //redirect to new page
+          navigate(`/recipe/${recipeSlug}`)
+        } catch (err) {
+            console.error("Request failed: ", err)
+            alert("Network error. Please try again later.")
+        }
+    
       }
     
       const handleButtonClick = () => {

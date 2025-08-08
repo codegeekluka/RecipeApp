@@ -1,7 +1,8 @@
 import axios from "axios"
 import '../styles/Login.css'
-import { useState } from "react"
+import { useState, useEffect, useContext} from "react"
 import { useNavigate } from "react-router-dom"
+import { AuthContext } from "../contexts/AuthContext"
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -10,6 +11,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate();
+    const { login, logout } = useContext(AuthContext)
 
     const validateForm = () => {
         if (!username || !password){ //if either password or username are empty
@@ -19,6 +21,10 @@ const Login = () => {
         setError('')
         return true;
     }
+    useEffect(() => {
+        // Auto logout whenever user lands on login page
+        logout();
+      }, []);
 
 
     const handleLogin = async (e) =>{
@@ -38,9 +44,10 @@ const Login = () => {
             });
             setLoading(false)
             
-            //if successful backend sends jwt token, this line stores in browser for future authenticated requests
-            localStorage.setItem('token',response.data.access_token) //*second arg is token value sent by fasapi, token is the key
-            navigate('/home') //redirect to homepage, page reloads at /
+            //if successful backend sends jwt token, this line calls authcontext login for future authenticated requests
+            login(response.data.access_token) //token value sent by fasapi
+           
+            navigate('/home')
         }
 
         catch (err){

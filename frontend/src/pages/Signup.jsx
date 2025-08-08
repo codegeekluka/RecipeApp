@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import '../styles/Signup.css';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { AuthContext } from "../contexts/AuthContext"
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ const Signup = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { login } = useContext(AuthContext)
 
   const navigate = useNavigate();
 
@@ -70,8 +72,7 @@ const Signup = () => {
           );
       
           //Store the token and navigate home
-          const { access_token } = loginRes.data;
-          localStorage.setItem("token", access_token);
+          login(loginRes.data.access_token)
           navigate('/home')
 
     } catch (err) {

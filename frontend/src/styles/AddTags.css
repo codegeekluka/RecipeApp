@@ -1,0 +1,152 @@
+
+    .tags-topright {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 160px;
+      z-index: 20;
+    }
+    .tag-pill {
+      background: #f4f4f4;
+      color: #333;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: default;
+      user-select: none;
+    }
+    .tag-remove {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      line-height: 1;
+      margin-left: 8px;
+      color: #666;
+      cursor: pointer;
+      padding: 0;
+    }
+    .tag-remove:hover {
+      color: #000;
+    }
+
+    .icon-button.add-tags-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1.5px solid #333;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-button.add-tags-btn:hover {
+      background: #eee;
+    }
+
+    .tags-popup {
+        position: absolute;
+        bottom: 60px;        /* Slightly above the buttons */
+        right: 0;            /* Align to the right edge of container */
+        background: white;
+        border-radius: 12px; /* More rounded corners */
+        padding: 16px 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Softer, bigger shadow */
+        width: 260px;
+        font-family: 'Inter', sans-serif;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-sizing: border-box;
+        overflow: visible;   /* Prevent clipping of children */
+      }
+
+    .default-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .default-tag {
+      padding: 4px 8px;
+      background: #f4f4f4;
+      border: 1.5px solid #ccc;
+      border-radius: 16px;
+      font-family: 'Inter';
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .default-tag.selected {
+      background: #333;
+      color: white;
+      border-color: #333;
+    }
+
+    .custom-tag-input {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+      }
+      
+      .custom-tag-input input {
+        flex-grow: 1;
+        min-width:0;
+        padding: 8px 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1.5px solid #ccc;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      .custom-tag-input input:focus {
+        outline: none;
+        border-color: #333;
+      }
+      
+      .custom-tag-input button {
+        padding: 8px 14px;
+        border: none;
+        background: #333;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      
+      .custom-tag-input button:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
+      
+      .custom-tag-input button:hover:not(:disabled) {
+        background: #555;
+      }
+      
+
+    .popup-actions {
+      text-align: right;
+    }
+    .popup-actions button {
+      padding: 6px 12px;
+      border: none;
+      background: #333;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .popup-actions button:disabled {
+      background: #aaa;
+      cursor: default;
+    }

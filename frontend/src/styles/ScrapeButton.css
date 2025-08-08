@@ -1,14 +1,20 @@
 /* Button */
 .scrape-btn {
-    min-width: 200px;
-    min-height: 200px;
-    border-radius: 20px;
-    background-color: #6E3482;
-    color: white;
-    font-size: 10.5rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  min-width: 150px;
+  min-height: 150px;
+
+  width: clamp(150px, 20vw, 200px);
+  height: clamp(150px, 20vw, 200px);
+
+  border-radius: 20px;
+  background-color: #6E3482;
+  color: white;
+  font-size: 50px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px 0 10px 0;
+    
   }
   
   .scrape-btn:hover {
