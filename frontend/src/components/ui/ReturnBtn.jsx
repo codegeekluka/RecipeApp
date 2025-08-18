@@ -1,6 +1,6 @@
 // GoBackButton.jsx
 import React from "react";
-import "../styles/ReturnBtn.css";
+import "../../styles/layout/ReturnBtn.css";
 
 export default function ReturnBtn({ onClick }) {
   return (

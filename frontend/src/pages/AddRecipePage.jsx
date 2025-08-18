@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/AddRecipePage.css';
-import PillNav from '../components/PillNav.jsx';
+import '../styles/recipes/AddRecipePage.css';
+import PillNav from '../components/layout/PillNav.jsx';
 
 const AddRecipePage = () => {
   return (

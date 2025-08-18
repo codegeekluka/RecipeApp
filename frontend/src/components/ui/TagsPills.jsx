@@ -1,4 +1,4 @@
-import '../styles/AddTags.css'
+import '../../styles/ui/AddTags.css'
 export default function TagsPills({ tags, onRemoveTag, editMode = false }) {
     return (
       <div className="tags-topright">

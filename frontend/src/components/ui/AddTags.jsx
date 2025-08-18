@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import '../styles/AddTags.css'
+import '../../styles/ui/AddTags.css'
 
 const DEFAULT_TAGS = ["cheap", "fast", "vegetarian", "gluten-free", "easy", "healthy"];
 

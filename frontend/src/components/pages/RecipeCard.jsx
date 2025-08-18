@@ -1,7 +1,6 @@
-import '../styles/RecipeCard.css';
-import { AuthContext } from '../contexts/AuthContext';
+import '../../styles/recipes/RecipeCard.css';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useContext } from 'react';
-
 
 const RecipeCard = ({recipe, onClick }) => {
   const { recipes } = useContext(AuthContext)
@@ -15,7 +14,7 @@ const RecipeCard = ({recipe, onClick }) => {
         {recipe.description.split(" ").slice(0, 10).join(" ")}...
       </p>
     </div>
-    );
+  );
 }
 
 export default RecipeCard;

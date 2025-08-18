@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import CookBookCard from "../components/CookBookCard";
-import "../styles/MyRecipes.css";
-import TagDropdown from "../components/TagDropdown";
-import PillNav from "../components/PillNav.jsx";
+import CookBookCard from "../components/pages/CookBookCard";
+import "../styles/recipes/MyRecipes.css";
+import TagDropdown from "../components/ui/TagDropdown";
+import PillNav from "../components/layout/PillNav.jsx";
 
 export default function MyRecipes() {
   const { recipes, setNavOrigin, fetchUserRecipes, user } = useContext(AuthContext);

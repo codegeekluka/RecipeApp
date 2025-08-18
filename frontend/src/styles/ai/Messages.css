@@ -1,0 +1,129 @@
+/* Messages Component Styles */
+
+.welcome-message,
+.disabled-chat-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #64748b;
+}
+
+.welcome-icon,
+.disabled-icon {
+  margin-bottom: 16px;
+  color: #8b5cf6;
+}
+
+.welcome-message h4,
+.disabled-chat-message h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+}
+
+.welcome-message p,
+.disabled-chat-message p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.user-message {
+  justify-content: flex-end;
+}
+
+.assistant-message {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 16px 20px;
+  border-radius: 20px;
+  position: relative;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.user-message .message-content {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  color: white;
+  border-bottom-right-radius: 6px;
+}
+
+.assistant-message .message-content {
+  background: rgba(248, 250, 252, 0.8);
+  backdrop-filter: blur(10px);
+  color: #1e293b;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-bottom-left-radius: 6px;
+}
+
+.message-content p {
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  display: block;
+}
+
+.loading-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  color: #64748b;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8b5cf6;
+  animation: loading-bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loading-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .message-content {
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .message-content {
+    max-width: 90%;
+    padding: 12px 16px;
+  }
+}

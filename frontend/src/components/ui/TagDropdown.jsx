@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../styles/TagDropdown.css";
+import "../../styles/ui/TagDropdown.css";
 
 export default function TagDropdown({ options, selected, onChange }) {
   const [isOpen, setIsOpen] = useState(false);

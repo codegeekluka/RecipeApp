@@ -1,0 +1,107 @@
+/* Cheffy AI Assistant - Main Layout Styles */
+
+/* Import modular component styles */
+@import './ChatInterface.css';
+@import './Aipagerecipecard.css';
+@import './Messages.css';
+@import './HelpModals.css';
+@import '../shared/utilities.css';
+
+/* Main Container */
+.cheffy-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Hero Section */
+.cheffy-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 0 10px;
+  background-image: url('pexels-enginakyurt-1435895.jpg');
+  background-size: 1200px 400px;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: visible;
+  width: 100%;
+  height: 400px;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cheffy-hero h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cheffy-hero p {
+  font-size: 1.2rem;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* AI Chat Panel */
+.ai-chat-panel {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ai-chat-panel {
+    padding: 20px;
+  }
+  
+  .chat-interface {
+    height: calc(100vh - 600px);
+  }
+}
+
+@media (max-width: 768px) {
+  .cheffy-hero {
+    height: 300px;
+    background-size: cover;
+  }
+  
+  .cheffy-hero h1 {
+    font-size: 2.25rem;
+  }
+  
+  .cheffy-hero p {
+    font-size: 1.125rem;
+  }
+  
+  .ai-chat-panel {
+    padding: 16px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cheffy-hero {
+    height: 250px;
+  }
+  
+  .cheffy-hero h1 {
+    font-size: 1.875rem;
+  }
+  
+  .cheffy-hero p {
+    font-size: 1rem;
+  }
+}

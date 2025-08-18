@@ -1,4 +1,4 @@
-import '../styles/DeleteButton.css'
+import '../../styles/ui/DeleteButton.css'
 import { useState } from 'react'
 import { useNavigate, useParams} from 'react-router-dom';
 import DeleteModal from './DeleteModal';

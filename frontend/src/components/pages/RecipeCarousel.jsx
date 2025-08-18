@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import RecipeCard from './RecipeCard.jsx';
-import ArrowButton from './ArrowBtn.jsx';
+import ArrowButton from '../ui/ArrowBtn.jsx';
 
 const RecipeCarousel = ({ recipes, title, onCardClick }) => {
   const scrollRef = useRef(null);

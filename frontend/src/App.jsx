@@ -2,13 +2,13 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
-import Navbar from './components/NavBar.jsx'
+import Navbar from './components/layout/NavBar.jsx'
 import MyRecipes from './pages/MyRecipes.jsx'
 import RecipePage from './pages/RecipePage.jsx'
 import AddRecipePage from './pages/AddRecipePage.jsx'
 import Cheffy from './pages/Cheffy.jsx'
-import PrivateRoute from './components/PrivateRoute.jsx'
-import ScrollToTop from './components/ScrollToTop.jsx'
+import PrivateRoute from './components/layout/PrivateRoute.jsx'
+import ScrollToTop from './components/layout/ScrollToTop.jsx'
 
 function App() {
   

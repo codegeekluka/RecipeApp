@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from "react";
-import { FavoriteIcon, ActiveIcon } from "./Icons";
-import { toggleFavorite } from "../services/toggleFavorite";
-import { toggleActive } from "../services/toggleActive";
-import '../styles/RecipeHero.css'
-import DeleteButton from '../components/DeleteButton';
-import EditButton from '../components/EditButton';
-import ReturnBtn from '../components/ReturnBtn';
-import TagsManager from "./AddTags";
-import TagsPills from "./TagsPills";
-import { AuthContext } from "../contexts/AuthContext";
+import { FavoriteIcon, ActiveIcon } from "../ui/Icons";
+import { toggleFavorite } from "../../services/toggleFavorite";
+import { toggleActive } from "../../services/toggleActive";
+import '../../styles/recipes/RecipeHero.css'
+import DeleteButton from '../ui/DeleteButton';
+import EditButton from '../ui/EditButton';
+import ReturnBtn from '../ui/ReturnBtn';
+import TagsManager from "../ui/AddTags";
+import TagsPills from "../ui/TagsPills";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function RecipeHero({ recipe, tags, onAddTag, onRemoveTag, editMode, startEditing, saveRecipe, cancelEditing, navigate }) {
   const [isFavorite, setIsFavorite] = useState(recipe.is_favorite || false);

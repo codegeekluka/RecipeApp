@@ -4,8 +4,11 @@ import { createPortal } from 'react-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import useAIAssistantStore from '../stores/aiAssistantStore';
 import { getActiveRecipe } from '../services/getActiveRecipe';
-import '../styles/Cheffy.css';
-import PillNav from '../components/PillNav.jsx';
+import '../styles/ai/Cheffy.css';
+import PillNav from '../components/layout/PillNav.jsx';
+import ChatMessage from '../components/ai/ChatMessage.jsx';
+import AiPageRecipeCard from '../components/ai/AiPageRecipeCard.jsx';
+import ChatInput from '../components/ai/ChatInput.jsx';
 
 const Cheffy = () => {
   const { user } = useContext(AuthContext);
@@ -318,78 +321,12 @@ const Cheffy = () => {
 
         {/* Centered Recipe Card - Only show when no session, floating above chat */}
         {!sessionId && (
-          <div className="centered-recipe-card">
-            {isLoadingActiveRecipe ? (
-              <div className="recipe-loading">
-                <div className="loading-spinner"></div>
-                <p>Loading recipe...</p>
-              </div>
-            ) : activeRecipe ? (
-              <>
-                <div className="ai-recipe-image-container">
-                  {activeRecipe.image ? (
-                    <img 
-                      src={activeRecipe.image} 
-                      alt={activeRecipe.title} 
-                      className="ai-recipe-image"
-                    />
-                  ) : (
-                    <div className="ai-recipe-placeholder">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="ai-recipe-content">
-                  <h3 className="ai-recipe-title">{activeRecipe.title}</h3>
-                  
-                  <div className="ai-recipe-meta">
-                    <div className="meta-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                      </svg>
-                      <span>{activeRecipe.ingredients?.length || 0} ingredients</span>
-                    </div>
-                    <div className="meta-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                      </svg>
-                      <span>{activeRecipe.instructions?.length || 0} steps</span>
-                    </div>
-                  </div>
-                  
-                  <button 
-                    className="start-cooking-button"
-                    onClick={() => handleStartCooking(activeRecipe.id)}
-                    disabled={isLoading || !activeRecipe}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
-                    Start Session
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="no-recipe-state">
-                <div className="no-recipe-icon">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                  </svg>
-                </div>
-                <h3>No Active Recipe</h3>
-                <p>Select a recipe to start cooking</p>
-                <button 
-                  className="browse-recipes-button"
-                  onClick={() => navigate('/MyRecipes')}
-                >
-                  Browse Recipes
-                </button>
-              </div>
-            )}
-          </div>
+          <AiPageRecipeCard
+            activeRecipe={activeRecipe}
+            isLoadingActiveRecipe={isLoadingActiveRecipe}
+            onStartCooking={handleStartCooking}
+            isLoading={isLoading}
+          />
         )}
 
         {/* Chat Interface */}
@@ -458,17 +395,11 @@ const Cheffy = () => {
               </div>
             ) : (
               messages.map((message, index) => (
-                <div
+                <ChatMessage
                   key={index}
-                  className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
-                >
-                  <div className="message-content">
-                    <p>{message.text}</p>
-                    <span className="message-time">
-                      {formatTime(message.timestamp)}
-                    </span>
-                  </div>
-                </div>
+                  message={message}
+                  formatTime={formatTime}
+                />
               ))
             )}
             {isLoading && (
@@ -485,55 +416,20 @@ const Cheffy = () => {
           </div>
 
           {/* Input Area */}
-          <div className="input-area">
-            <form onSubmit={handleSendMessage} className="input-form">
-              <div className="input-container">
-                <textarea
-                  ref={inputRef}
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={!sessionId ? (isMobile ? "Start session to chat" : "Start a cooking session to chat with Cheffy...") : (activeRecipe ? `Ask me about ${activeRecipe.title}...` : "Start cooking with a recipe to ask questions...")}
-                  disabled={isLoading || isRecording || !sessionId}
-                  rows="1"
-                />
-                <div className="input-buttons">
-                  <button
-                    type="button"
-                    className={`mic-button ${isRecording ? 'recording' : ''}`}
-                    onClick={isRecording ? stopRecording : startRecording}
-                    disabled={isLoading || !sessionId}
-                    title={!sessionId ? 'Start a cooking session to use voice input' : (isRecording ? 'Stop Recording' : 'Start Voice Recording')}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                      <line x1="12" y1="19" x2="12" y2="23"/>
-                      <line x1="8" y1="23" x2="16" y2="23"/>
-                    </svg>
-                  </button>
-                  <button
-                    type="submit"
-                    className="send-button"
-                    disabled={!inputMessage.trim() || isLoading || isRecording || !sessionId}
-                    title={!sessionId ? 'Start a cooking session to send messages' : 'Send Message'}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="22" y1="2" x2="11" y2="13"/>
-                      <polygon points="22,2 15,22 11,13 2,9"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </form>
-            
-            {isRecording && (
-              <div className="recording-indicator">
-                <span className="pulse"></span>
-                Recording... Click to stop
-              </div>
-            )}
-                     </div>
+          <ChatInput
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            handleSendMessage={handleSendMessage}
+            startRecording={startRecording}
+            stopRecording={stopRecording}
+            isRecording={isRecording}
+            isLoading={isLoading}
+            sessionId={sessionId}
+            activeRecipe={activeRecipe}
+            isMobile={isMobile}
+            inputRef={inputRef}
+            handleKeyPress={handleKeyPress}
+          />
          </div>
        </div>
        

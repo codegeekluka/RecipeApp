@@ -1,11 +1,11 @@
-import '../styles/Home.css'
+import '../styles/pages/Home.css'
 import Login from './Login.jsx'
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react'
-import ScrapeWebsiteBtn from '../components/ScrapeWebsiteBtn.jsx'
+import ScrapeWebsiteBtn from '../components/utils/ScrapeWebsiteBtn.jsx'
 import { AuthContext } from '../contexts/AuthContext.jsx';
-import RecipeCarousel from '../components/RecipeCarousel.jsx';
-import PillNav from '../components/PillNav.jsx';
+import RecipeCarousel from '../components/pages/RecipeCarousel.jsx';
+import PillNav from '../components/layout/PillNav.jsx';
 
 
 const Home = () => {

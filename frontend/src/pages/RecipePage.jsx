@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import '../styles/RecipePage.css'
+import '../styles/recipes/RecipePage.css'
 import { useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../components/LoadingSpinner';
-import RecipeHero from '../components/RecipeHero.jsx';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import RecipeHero from '../components/pages/RecipeHero.jsx';
 
 import { saveRecipeService } from '../services/saveRecipe.js';
 import { fetchFullRecipe } from '../services/fetchFullRecipe.js';

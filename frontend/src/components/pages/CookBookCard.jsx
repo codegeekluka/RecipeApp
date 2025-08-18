@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../styles/CookbookCard.css";
+import "../../styles/recipes/CookbookCard.css";
 
 export default function CookBookCard({ recipe, onClick }) {
   return (

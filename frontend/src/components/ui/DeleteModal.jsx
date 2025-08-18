@@ -1,4 +1,4 @@
-import '../styles/DeleteModal.css'
+import '../../styles/ui/DeleteModal.css'
 
 export default function DeleteModal({ isOpen, onClose, onDelete }) {
   if (!isOpen) return null;

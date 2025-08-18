@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/PillNav.css';
+import '../../styles/layout/PillNav.css';
 
 const PillNav = () => {
   const navigate = useNavigate();

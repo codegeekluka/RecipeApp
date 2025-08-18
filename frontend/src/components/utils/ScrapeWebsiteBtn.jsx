@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
-import '../styles/ScrapeButton.css'
+import '../../styles/ui/ScrapeButton.css'
 import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const ScrapeWebsiteBtn = () => {
     const [showModal, setShowModal] = useState(false);
