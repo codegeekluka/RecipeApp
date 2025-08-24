@@ -1,0 +1,6 @@
+projectKey=react-python-app
+serverUrl=http://localhost:9000
+serverVersion=25.8.0.112029
+dashboardUrl=http://localhost:9000/dashboard?id=react-python-app
+ceTaskId=70c4cab6-2176-4712-8c23-df1ffdb2858b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=70c4cab6-2176-4712-8c23-df1ffdb2858b
