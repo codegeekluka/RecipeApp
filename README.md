@@ -1,8 +1,23 @@
 # Recipe App
 
-A modern recipe application built with React, FastAPI, and PostgreSQL, featuring AI-powered cooking assistance and voice interactions.
+**Live app:** [Try it here](https://your-app.vercel.app) *(replace with your Vercel URL)*
 
-## 🚀 **Quick Start**
+A modern recipe app with an **AI cooking assistant** you can talk to while you cook. Save recipes, plan meals, and get voice-powered help in the kitchen.
+
+---
+
+## About the app
+
+- **Recipes** — Add and organize recipes (from URLs or manually), with ingredients and step-by-step instructions.
+- **Cheffy AI** — Chat or use voice to ask questions about the recipe you’re cooking (e.g. substitutions, timing, techniques). Uses your current recipe as context.
+- **Meal planning** — Plan your week with a simple drag-and-drop planner.
+- **Profile & preferences** — Set dietary goals and preferences for a more personalized experience.
+
+Built with **React**, **FastAPI**, **PostgreSQL** (with pgvector for semantic search), and **OpenAI** for the assistant. Deployed on **Vercel** (frontend) and **Render** (backend).
+
+---
+
+## 🚀 **Quick Start (developers)**
 
 ### **Prerequisites**
 - Python 3.11+
