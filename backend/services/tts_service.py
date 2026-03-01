@@ -77,11 +77,13 @@ class TTSService:
             )
 
             # Use the correct API method: text_to_speech.stream
+            # Updated to use eleven_turbo_v2 which is available on free tier
+            # eleven_monolingual_v1 and eleven_multilingual_v1 are deprecated for free tier
             logger.info("Using text_to_speech.stream method")
             audio_stream = self.client.text_to_speech.stream(
                 text=text,
                 voice_id=voice,
-                model_id="eleven_monolingual_v1",  # Most cost-efficient model
+                model_id="eleven_turbo_v2",  # Available on free tier, fast and efficient
             )
 
             # Convert stream to bytes
@@ -99,7 +101,19 @@ class TTSService:
             return audio_bytes
 
         except Exception as e:
-            logger.error(f"Error generating TTS audio: {e}", exc_info=True)
+            error_msg = str(e)
+            logger.error(f"Error generating TTS audio: {error_msg}", exc_info=True)
+            
+            # Check for specific error types
+            if "model_deprecated" in error_msg.lower() or "deprecated" in error_msg.lower():
+                logger.error("ElevenLabs model is deprecated. The model has been updated to eleven_turbo_v2.")
+            elif "quota" in error_msg.lower() or "limit" in error_msg.lower():
+                logger.error("ElevenLabs quota/limit exceeded. Check your account usage.")
+            elif "unauthorized" in error_msg.lower() or "401" in error_msg:
+                logger.error("ElevenLabs API key is invalid or expired.")
+            elif "rate" in error_msg.lower():
+                logger.error("ElevenLabs rate limit exceeded. Please wait and try again.")
+            
             return None
 
     async def generate_audio(self, text: str, voice_id: Optional[str] = None) -> bytes:

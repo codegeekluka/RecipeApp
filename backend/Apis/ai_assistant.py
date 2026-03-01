@@ -16,6 +16,10 @@ from backend.Apis.auth import get_current_user
 from backend.database.database import get_db
 from backend.database.db_models import Recipe, User, UserSession
 from backend.services.ai_assistant import ai_assistant
+from backend.services.subscription_service import (
+    check_ai_session_limit,
+    increment_session_usage,
+)
 from backend.services.tts_service import tts_service
 
 # Configure logging
@@ -161,13 +165,15 @@ async def start_cooking_session(
 @router.post("/ask", response_model=ChatResponse)
 async def ask_ai_assistant(
     request: ChatRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(check_ai_session_limit),
     db: Session = Depends(get_db),
 ):
     """Ask the AI assistant a question about the current recipe"""
     start_time = time.time()
 
     try:
+        # Increment session usage (only for non-premium users)
+        increment_session_usage(db, current_user.id)
         # Verify session exists and belongs to user
         session = (
             db.query(UserSession)
@@ -217,12 +223,20 @@ async def ask_ai_assistant(
         audio_url = None
         try:
             logger.info("Generating TTS audio for text response")
-            audio_url = await tts_service.generate_audio_url(ai_response)
-            logger.info(f"TTS audio URL generated (text): {audio_url}")
+            
+            # Check if TTS service is available
+            if not tts_service.is_available:
+                logger.warning("TTS service is not available. Check ELEVENLABS_API_KEY configuration.")
+            else:
+                audio_url = await tts_service.generate_audio_url(ai_response)
+                if audio_url:
+                    logger.info(f"TTS audio URL generated (text): {audio_url}")
+                else:
+                    logger.warning("TTS service returned None for audio_url. Check logs for errors.")
         except Exception as e:
-            logger.warning(f"Failed to generate TTS audio (text): {e}")
+            logger.error(f"Failed to generate TTS audio (text): {e}", exc_info=True)
             logger.warning(
-                "TTS service may not be properly configured (missing ELEVENLABS_API_KEY)"
+                "TTS service may not be properly configured (missing ELEVENLABS_API_KEY) or API call failed"
             )
 
         # Calculate response time
@@ -264,11 +278,13 @@ async def ask_ai_assistant(
 async def process_audio_input(
     session_id: str = Form(...),
     audio_file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(check_ai_session_limit),
     db: Session = Depends(get_db),
 ):
     """Process audio input and convert to text for AI assistant"""
     try:
+        # Increment session usage (only for non-premium users)
+        increment_session_usage(db, current_user.id)
         logger.info(
             f"Processing audio upload for session {session_id} by user {current_user.id}"
         )
@@ -364,12 +380,20 @@ async def process_audio_input(
             audio_url = None
             try:
                 logger.info("Generating TTS audio for voice response")
-                audio_url = await tts_service.generate_audio_url(ai_response)
-                logger.info(f"TTS audio URL generated (voice): {audio_url}")
+                
+                # Check if TTS service is available
+                if not tts_service.is_available:
+                    logger.warning("TTS service is not available. Check ELEVENLABS_API_KEY configuration.")
+                else:
+                    audio_url = await tts_service.generate_audio_url(ai_response)
+                    if audio_url:
+                        logger.info(f"TTS audio URL generated (voice): {audio_url}")
+                    else:
+                        logger.warning("TTS service returned None for audio_url. Check logs for errors.")
             except Exception as e:
-                logger.warning(f"Failed to generate TTS audio (voice): {e}")
+                logger.error(f"Failed to generate TTS audio (voice): {e}", exc_info=True)
                 logger.warning(
-                    "TTS service may not be properly configured (missing ELEVENLABS_API_KEY)"
+                    "TTS service may not be properly configured (missing ELEVENLABS_API_KEY) or API call failed"
                 )
 
             # Calculate response time
@@ -446,6 +470,27 @@ async def get_tts_stream(response_id: str):
     except Exception as e:
         logger.error(f"Error getting TTS stream: {e}")
         raise HTTPException(status_code=404, detail="Audio not found")
+
+
+@router.get("/tts/status")
+async def get_tts_status(current_user: User = Depends(get_current_user)):
+    """Check TTS service status and configuration"""
+    try:
+        status = tts_service.get_status()
+        return {
+            "is_available": status.get("is_available", False),
+            "has_api_key": bool(os.getenv("ELEVENLABS_API_KEY")),
+            "redis_available": status.get("redis_available", False),
+            "message": "TTS service is available" if status.get("is_available") else "TTS service is not available. Check ELEVENLABS_API_KEY configuration."
+        }
+    except Exception as e:
+        logger.error(f"Error getting TTS status: {e}")
+        return {
+            "is_available": False,
+            "has_api_key": False,
+            "redis_available": False,
+            "message": f"Error checking TTS status: {str(e)}"
+        }
 
 
 # Session management endpoints

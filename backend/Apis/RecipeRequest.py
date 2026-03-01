@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy.sql import func
 
 from backend.Apis.auth import get_current_user
 from backend.database.database import get_db
@@ -16,6 +17,7 @@ from backend.database.db_models import (
     Ingredient,
     Instruction,
     Recipe,
+    RecipeNote,
     Tag,
     User,
     UserTag,
@@ -809,3 +811,176 @@ def remove_user_tag(
     except Exception as e:
         print("Error removing user tag:", str(e))
         raise HTTPException(status_code=500, detail="Failed to remove user tag")
+
+
+# Recipe Notes Endpoints
+class RecipeNoteCreate(BaseModel):
+    note: Optional[str] = None
+
+
+class RecipeNoteUpdate(BaseModel):
+    note: Optional[str] = None
+
+
+@router.get("/recipes/{slug}/note")
+def get_recipe_note(
+    slug: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Get user's note for a specific recipe"""
+    try:
+        recipe = db.query(Recipe).filter(Recipe.slug == slug).first()
+        if not recipe:
+            raise HTTPException(status_code=404, detail=RECIPE_NOT_FOUND)
+
+        note = (
+            db.query(RecipeNote)
+            .filter(RecipeNote.recipe_id == recipe.id, RecipeNote.user_id == current_user.id)
+            .first()
+        )
+
+        if note:
+            return {
+                "id": note.id,
+                "note": note.note,
+                "created_at": note.created_at.isoformat() if note.created_at else None,
+                "updated_at": note.updated_at.isoformat() if note.updated_at else None,
+            }
+        else:
+            return {"id": None, "note": None, "created_at": None, "updated_at": None}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("Error fetching recipe note:", str(e))
+        raise HTTPException(status_code=500, detail="Failed to fetch recipe note")
+
+
+@router.post("/recipes/{slug}/note")
+def create_recipe_note(
+    slug: str,
+    note_data: RecipeNoteCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Create or update user's note for a specific recipe"""
+    try:
+        recipe = db.query(Recipe).filter(Recipe.slug == slug).first()
+        if not recipe:
+            raise HTTPException(status_code=404, detail=RECIPE_NOT_FOUND)
+
+        # Check if note already exists
+        existing_note = (
+            db.query(RecipeNote)
+            .filter(RecipeNote.recipe_id == recipe.id, RecipeNote.user_id == current_user.id)
+            .first()
+        )
+
+        if existing_note:
+            # Update existing note
+            existing_note.note = note_data.note
+            existing_note.updated_at = func.now()
+            db.commit()
+            db.refresh(existing_note)
+            return {
+                "id": existing_note.id,
+                "note": existing_note.note,
+                "created_at": existing_note.created_at.isoformat() if existing_note.created_at else None,
+                "updated_at": existing_note.updated_at.isoformat() if existing_note.updated_at else None,
+            }
+        else:
+            # Create new note
+            new_note = RecipeNote(
+                user_id=current_user.id,
+                recipe_id=recipe.id,
+                note=note_data.note,
+            )
+            db.add(new_note)
+            db.commit()
+            db.refresh(new_note)
+            return {
+                "id": new_note.id,
+                "note": new_note.note,
+                "created_at": new_note.created_at.isoformat() if new_note.created_at else None,
+                "updated_at": new_note.updated_at.isoformat() if new_note.updated_at else None,
+            }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("Error creating/updating recipe note:", str(e))
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to create/update recipe note")
+
+
+@router.put("/recipes/{slug}/note")
+def update_recipe_note(
+    slug: str,
+    note_data: RecipeNoteUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Update user's note for a specific recipe"""
+    try:
+        recipe = db.query(Recipe).filter(Recipe.slug == slug).first()
+        if not recipe:
+            raise HTTPException(status_code=404, detail=RECIPE_NOT_FOUND)
+
+        note = (
+            db.query(RecipeNote)
+            .filter(RecipeNote.recipe_id == recipe.id, RecipeNote.user_id == current_user.id)
+            .first()
+        )
+
+        if not note:
+            raise HTTPException(status_code=404, detail="Note not found")
+
+        note.note = note_data.note
+        note.updated_at = func.now()
+        db.commit()
+        db.refresh(note)
+
+        return {
+            "id": note.id,
+            "note": note.note,
+            "created_at": note.created_at.isoformat() if note.created_at else None,
+            "updated_at": note.updated_at.isoformat() if note.updated_at else None,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("Error updating recipe note:", str(e))
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update recipe note")
+
+
+@router.delete("/recipes/{slug}/note", status_code=204)
+def delete_recipe_note(
+    slug: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Delete user's note for a specific recipe"""
+    try:
+        recipe = db.query(Recipe).filter(Recipe.slug == slug).first()
+        if not recipe:
+            raise HTTPException(status_code=404, detail=RECIPE_NOT_FOUND)
+
+        note = (
+            db.query(RecipeNote)
+            .filter(RecipeNote.recipe_id == recipe.id, RecipeNote.user_id == current_user.id)
+            .first()
+        )
+
+        if not note:
+            raise HTTPException(status_code=404, detail="Note not found")
+
+        db.delete(note)
+        db.commit()
+
+        return None
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("Error deleting recipe note:", str(e))
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to delete recipe note")

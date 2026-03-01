@@ -5,10 +5,12 @@ import '../styles/recipes/RecipePage.css'
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import RecipeHero from '../components/pages/RecipeHero.jsx';
+import DeleteModal from '../components/ui/DeleteModal.jsx';
 
 import { saveRecipeService } from '../services/saveRecipe.js';
 import { fetchFullRecipe } from '../services/fetchFullRecipe.js';
 import { updateTags } from '../services/tagsManger.js';
+import { getRecipeNote, saveRecipeNote } from '../services/recipeNotesService.js';
 
 const RecipePage = () => {
     const { slug } = useParams();
@@ -20,6 +22,11 @@ const RecipePage = () => {
     const [editMode, setEditMode] = useState(false);
     const [tags, setTags] = useState([])
     const [initialRecipe, setInitialRecipe] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteItemType, setDeleteItemType] = useState(null); // 'ingredient' or 'instruction'
+    const [deleteItemIndex, setDeleteItemIndex] = useState(null);
+    const [noteText, setNoteText] = useState("");
+    const [isSavingNote, setIsSavingNote] = useState(false);
     const token = localStorage.getItem('token');
 
     const navigate=useNavigate()
@@ -163,11 +170,25 @@ const RecipePage = () => {
           });
           setTags(localRecipe.tags || [])
         }
-        loadRecipe()
+        
+        // Load recipe note
+        const loadNote = async () => {
+          if (slug !== "new" && token) {
+            try {
+              const note = await getRecipeNote(slug, token);
+              setNoteText(note.note || "");
+            } catch (err) {
+              console.error("Failed to fetch note:", err);
+            }
+          }
+        };
+        
+        loadRecipe();
+        loadNote();
         return () => {
           isMounted = false;
         };
-      }, [slug, recipes]);
+      }, [slug, recipes, token]);
 
       const handleAddTag = async (newTag) => {
         // Handle both single tags and arrays of tags
@@ -234,6 +255,70 @@ const RecipePage = () => {
             } else{
                 alert("Error saving recipe.");
             }    
+        }
+      };
+
+      // Handler functions for ingredients
+      const addIngredient = () => {
+        const updated = [...(draftRecipe?.ingredients || []), ""];
+        setDraftRecipe({ ...draftRecipe, ingredients: updated });
+      };
+
+      const removeIngredient = (index) => {
+        setDeleteItemType('ingredient');
+        setDeleteItemIndex(index);
+        setDeleteModalOpen(true);
+      };
+
+      // Handler functions for instructions
+      const addInstruction = () => {
+        const updated = [...(draftRecipe?.instructions || []), ""];
+        setDraftRecipe({ ...draftRecipe, instructions: updated });
+      };
+
+      const removeInstruction = (index) => {
+        setDeleteItemType('instruction');
+        setDeleteItemIndex(index);
+        setDeleteModalOpen(true);
+      };
+
+      // Handle delete confirmation
+      const handleDeleteConfirm = () => {
+        if (deleteItemType === 'ingredient' && deleteItemIndex !== null) {
+          const updated = draftRecipe.ingredients.filter((_, i) => i !== deleteItemIndex);
+          setDraftRecipe({ ...draftRecipe, ingredients: updated });
+        } else if (deleteItemType === 'instruction' && deleteItemIndex !== null) {
+          const updated = draftRecipe.instructions.filter((_, i) => i !== deleteItemIndex);
+          setDraftRecipe({ ...draftRecipe, instructions: updated });
+        }
+        setDeleteModalOpen(false);
+        setDeleteItemType(null);
+        setDeleteItemIndex(null);
+      };
+
+      // Handle delete cancel
+      const handleDeleteCancel = () => {
+        setDeleteModalOpen(false);
+        setDeleteItemType(null);
+        setDeleteItemIndex(null);
+      };
+
+      // Handle note save
+      const handleSaveNote = async () => {
+        if (slug === "new" || !token) return;
+        
+        setIsSavingNote(true);
+        try {
+          await saveRecipeNote(slug, noteText, token);
+        } catch (err) {
+          if (err.response?.status === 403) {
+            alert("Session expired. Please login again.");
+            navigate('/');
+          } else {
+            alert("Error saving note.");
+          }
+        } finally {
+          setIsSavingNote(false);
         }
       };
       
@@ -467,24 +552,61 @@ const RecipePage = () => {
                 >
                     Instructions
                 </button>
+                <button
+                    className={activeTab === "notes" ? "active" : ""}
+                    onClick={() => setActiveTab("notes")}
+                >
+                    Notes
+                </button>
+                <button
+                    className={activeTab === "reviews" ? "active" : ""}
+                    onClick={() => setActiveTab("reviews")}
+                >
+                    Reviews
+                </button>
                 </div>
 
                 {/* TAB CONTENT */}
                 <div className="tab-content">
                 {activeTab === "ingredients" && (
                     editMode ? (
-                        draftRecipe?.ingredients.map((item, index) => (
-                          <input
-                            className="ingredients-input"
-                            key={index}
-                            value={item}
-                            onChange={(e) => {
-                              const updated = [...draftRecipe.ingredients];
-                              updated[index] = e.target.value;
-                              setDraftRecipe({ ...draftRecipe, ingredients: updated });
-                            }}
-                          />
-                        ))
+                        <>
+                          {draftRecipe?.ingredients.map((item, index) => (
+                            <div key={index} className="edit-item-wrapper">
+                              <input
+                                className="ingredients-input"
+                                value={item}
+                                onChange={(e) => {
+                                  const updated = [...draftRecipe.ingredients];
+                                  updated[index] = e.target.value;
+                                  setDraftRecipe({ ...draftRecipe, ingredients: updated });
+                                }}
+                              />
+                              <button
+                                className="remove-item-btn"
+                                onClick={() => removeIngredient(index)}
+                                type="button"
+                                title="Remove ingredient"
+                              >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            className="add-item-btn"
+                            onClick={addIngredient}
+                            type="button"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <line x1="12" y1="5" x2="12" y2="19"></line>
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Ingredient
+                          </button>
+                        </>
                       ) : (
                         <ul>
                           {recipe?.ingredients.map((item, index) => (
@@ -496,18 +618,43 @@ const RecipePage = () => {
                 )}
                 {activeTab === "instructions" && (
                     editMode ? (
-                        draftRecipe?.instructions.map((item, index) => (
-                          <textarea
-                            className="instructions-textarea"
-                            key={index}
-                            value={item}
-                            onChange={(e) => {
-                              const updated = [...draftRecipe.instructions];
-                              updated[index] = e.target.value;
-                              setDraftRecipe({ ...draftRecipe, instructions: updated });
-                            }}
-                          />
-                        ))
+                        <>
+                          {draftRecipe?.instructions.map((item, index) => (
+                            <div key={index} className="edit-item-wrapper">
+                              <textarea
+                                className="instructions-textarea"
+                                value={item}
+                                onChange={(e) => {
+                                  const updated = [...draftRecipe.instructions];
+                                  updated[index] = e.target.value;
+                                  setDraftRecipe({ ...draftRecipe, instructions: updated });
+                                }}
+                              />
+                              <button
+                                className="remove-item-btn"
+                                onClick={() => removeInstruction(index)}
+                                type="button"
+                                title="Remove step"
+                              >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            className="add-item-btn"
+                            onClick={addInstruction}
+                            type="button"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <line x1="12" y1="5" x2="12" y2="19"></line>
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Step
+                          </button>
+                        </>
                       ) : (
                         <ol>
                           {recipe?.instructions.map((item, index) => (
@@ -517,8 +664,59 @@ const RecipePage = () => {
                       )
                       
                 )}
+                {activeTab === "notes" && (
+                    <div className="notes-tab-content">
+                        <textarea
+                            className="notes-textarea"
+                            value={noteText}
+                            onChange={(e) => setNoteText(e.target.value)}
+                            placeholder="Add your personal notes about this recipe..."
+                            rows={10}
+                        />
+                        <button
+                            className="save-note-btn"
+                            onClick={handleSaveNote}
+                            disabled={isSavingNote}
+                            type="button"
+                        >
+                            {isSavingNote ? "Saving..." : "Save Note"}
+                        </button>
+                    </div>
+                )}
+                {activeTab === "reviews" && (
+                    <div className="reviews-tab-content">
+                        <div className="reviews-placeholder">
+                            <div className="stars-placeholder">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <svg
+                                        key={star}
+                                        className="star-icon"
+                                        width="32"
+                                        height="32"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.5"
+                                    >
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                ))}
+                            </div>
+                            <p className="reviews-placeholder-text">Reviews coming soon</p>
+                        </div>
+                    </div>
+                )}
                 </div>
             </div>
+            <DeleteModal
+                isOpen={deleteModalOpen}
+                onClose={handleDeleteCancel}
+                onDelete={handleDeleteConfirm}
+                title={deleteItemType === 'ingredient' ? "Delete ingredient?" : "Delete step?"}
+                description={deleteItemType === 'ingredient' 
+                    ? "Are you sure you want to delete this ingredient?" 
+                    : "Are you sure you want to delete this step?"}
+            />
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import '../../styles/ui/DeleteModal.css'
 
-export default function DeleteModal({ isOpen, onClose, onDelete }) {
+export default function DeleteModal({ isOpen, onClose, onDelete, title = "Delete recipe?", description = "Are you sure you want to delete this recipe?" }) {
   if (!isOpen) return null;
 
   const modalContent = (
@@ -15,9 +15,9 @@ export default function DeleteModal({ isOpen, onClose, onDelete }) {
           </svg>
         </button>
         <div className="modal-content">
-          <h2 className="modal-heading">Delete recipe?</h2>
+          <h2 className="modal-heading">{title}</h2>
           <p className="modal-description">
-            Are you sure you want to delete this recipe?
+            {description}
           </p>
         </div>
         <div className="modal-button-wrapper">

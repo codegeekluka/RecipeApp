@@ -349,6 +349,44 @@ def upload_hero_image(
         )
 
 
+@router.delete("/me/delete-profile-picture")
+def delete_profile_picture(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Delete profile picture"""
+    try:
+        # Set profile picture URL to null
+        current_user.profile_picture_url = None  # type: ignore
+        db.commit()
+
+        return {"message": "Profile picture deleted successfully"}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to delete profile picture: {str(e)}"
+        )
+
+
+@router.delete("/me/delete-hero-image")
+def delete_hero_image(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Delete hero section image"""
+    try:
+        # Set hero image URL to null
+        current_user.hero_image_url = None  # type: ignore
+        db.commit()
+
+        return {"message": "Hero image deleted successfully"}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to delete hero image: {str(e)}"
+        )
+
+
 @router.get("/me/preferences/options")
 def get_preference_options():
     """Get all available preference options for onboarding"""

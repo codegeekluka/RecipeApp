@@ -192,6 +192,38 @@ class TestUserProfileAPI:
             if os.path.exists(temp_path):
                 os.unlink(temp_path)
     
+    def test_delete_profile_picture(self, client: TestClient, sample_user: User):
+        """Test deleting profile picture"""
+        # First set a profile picture URL
+        sample_user.profile_picture_url = "/uploads/profile_pictures/test.jpg"
+        client.app.dependency_overrides[get_db].__next__().commit()
+        
+        response = client.delete("/user/delete-profile-picture")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["message"] == "Profile picture deleted successfully"
+        
+        # Verify the profile picture URL is set to None
+        client.app.dependency_overrides[get_db].__next__().refresh(sample_user)
+        assert sample_user.profile_picture_url is None
+    
+    def test_delete_hero_image(self, client: TestClient, sample_user: User):
+        """Test deleting hero image"""
+        # First set a hero image URL
+        sample_user.hero_image_url = "/uploads/hero_images/test.jpg"
+        client.app.dependency_overrides[get_db].__next__().commit()
+        
+        response = client.delete("/user/delete-hero-image")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["message"] == "Hero image deleted successfully"
+        
+        # Verify the hero image URL is set to None
+        client.app.dependency_overrides[get_db].__next__().refresh(sample_user)
+        assert sample_user.hero_image_url is None
+    
     def test_get_user_preferences(self, client: TestClient, sample_user: User):
         """Test getting user preferences"""
         response = client.get("/user/preferences")

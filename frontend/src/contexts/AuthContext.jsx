@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUserRecipes = useCallback(async (token) => {
     try {
   
-        const response = await axios.get('http://localhost:8000/user/recipes', {
+        const response = await axios.get('http://localhost:8000/user/recipes?full_details=true', {
           headers: {Authorization: `Bearer ${token}`}
         });
         setRecipes(response.data.recipes)

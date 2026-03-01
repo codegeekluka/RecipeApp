@@ -3,7 +3,7 @@ import RecipeCard from './RecipeCard.jsx';
 import ArrowButton from '../ui/ArrowBtn.jsx';
 
 // Add More Card Component
-const AddMoreCard = ({ tagType }) => {
+const AddMoreCard = ({ tagType, onClick }) => {
   const getTagText = (title) => {
     switch (title) {
       case "Your Favorites":
@@ -26,7 +26,7 @@ const AddMoreCard = ({ tagType }) => {
   const tagText = getTagText(tagType);
 
   return (
-    <div className="add-more-card">
+    <div className="add-more-card" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="add-more-icon">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <line x1="12" y1="5" x2="12" y2="19" />
@@ -38,7 +38,7 @@ const AddMoreCard = ({ tagType }) => {
   );
 };
 
-const RecipeCarousel = ({ recipes, title, onCardClick }) => {
+const RecipeCarousel = ({ recipes, title, onCardClick, onAddMoreClick }) => {
   const scrollRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -102,7 +102,7 @@ const RecipeCarousel = ({ recipes, title, onCardClick }) => {
             />
           ))}
           {shouldShowAddMore && (
-            <AddMoreCard tagType={title} />
+            <AddMoreCard tagType={title} onClick={onAddMoreClick} />
           )}
         </div>
         <ArrowButton 

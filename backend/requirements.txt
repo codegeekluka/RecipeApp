@@ -52,6 +52,11 @@ cryptography               # Crypto primitives (used by python-jose, passlib)
 bcrypt==4.0.1                     # Password hashing algorithm (used by passlib)
 
 # =====================
+# Payment Processing
+# =====================
+stripe>=7.0.0              # Stripe API for payment processing
+
+# =====================
 # Utilities/Other
 # =====================
 # (Add any other general-purpose or utility libraries here)

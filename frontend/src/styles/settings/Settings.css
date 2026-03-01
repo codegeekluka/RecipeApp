@@ -110,6 +110,7 @@
 
 .profile-tab,
 .preferences-tab,
+.subscription-tab,
 .appearance-tab {
   animation: fadeIn 0.4s ease;
 }
@@ -250,22 +251,16 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  cursor: pointer;
   transition: all 0.3s ease;
   background: var(--color-background-glass-secondary);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 1;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
-.image-upload-area:hover {
-  border-color: #9333ea;
-  background: rgba(147, 51, 234, 0.08);
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.15);
-}
+/* Removed hover effects - functionality now only through dropdown */
 
 .image-upload-area.has-image {
   border-style: solid;
@@ -309,20 +304,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: all 0.3s ease;
   background: var(--color-background-glass-secondary);
   backdrop-filter: blur(10px);
   margin-top: 0.5rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
 }
 
-.hero-image-upload:hover {
-  border-color: #9333ea;
-  background: rgba(147, 51, 234, 0.08);
-  transform: scale(1.02);
-  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.15);
-}
+/* Removed hover effects - functionality now only through dropdown */
 
 .hero-image-upload.has-image {
   border-style: solid;
@@ -344,6 +334,36 @@
   object-fit: cover;
   border-radius: 12px;
   opacity: 0.6;
+}
+
+/* Image Upload Wrappers */
+.image-upload-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-image-upload-container {
+  position: relative;
+}
+
+.hero-image-upload-wrapper {
+  position: relative;
+  display: block;
+}
+
+/* Position dropdown in top-right corner of images */
+.image-upload-wrapper .image-action-dropdown {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}
+
+.hero-image-upload-wrapper .image-action-dropdown {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
 }
 
 /* Actions */
@@ -629,5 +649,197 @@
   font-size: 0.95rem;
   margin: 0;
   line-height: 1.5;
+}
+
+/* Subscription Tab */
+.subscription-tab {
+  padding: 2rem 0;
+}
+
+.subscription-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.subscription-status-card {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border-glass);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.subscription-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 1.5rem;
+}
+
+.subscription-premium {
+  text-align: center;
+}
+
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.2));
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #d4af37;
+}
+
+.premium-icon {
+  font-size: 1.25rem;
+}
+
+.subscription-description {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.premium-benefits {
+  text-align: left;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--color-background-glass-secondary);
+  border-radius: 12px;
+}
+
+.premium-benefits h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 1rem;
+}
+
+.premium-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.premium-benefits li {
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.subscription-free {
+  text-align: center;
+}
+
+.free-badge {
+  display: inline-block;
+  background: var(--color-background-glass-secondary);
+  border: 1px solid var(--color-border-glass);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.session-usage {
+  margin: 1.5rem 0;
+}
+
+.session-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.session-label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.session-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.session-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--color-background-glass-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.session-progress-bar {
+  height: 100%;
+  background: linear-gradient(135deg, #9333ea, #4f46e5);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.session-remaining {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.upgrade-button {
+  margin-top: 1.5rem;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.subscription-info {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border-glass);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.subscription-info h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 1rem;
+}
+
+.subscription-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subscription-info li {
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.subscription-info li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #9333ea;
+  font-weight: bold;
 }
 

@@ -6,12 +6,15 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from backend.Apis.ai_assistant import router as ai_assistant_router
 from backend.Apis.auth import router as auth_router
 from backend.Apis.RecipeRequest import router as recipe_router
+from backend.Apis.stripe_payment import router as stripe_router
+from backend.Apis.subscription import router as subscription_router
 from backend.Apis.user_profile import router as user_profile_router
 
 # Configure logging
@@ -54,6 +57,19 @@ if not os.path.exists(uploads_dir):
     os.makedirs(uploads_dir)
 
 app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+
+# CORS middleware for static files
+@app.middleware("http")
+async def add_cors_headers(request, call_next):
+    response = await call_next(request)
+    
+    # Add CORS headers for static file requests
+    if request.url.path.startswith("/uploads/"):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+    
+    return response
 
 # Request timing middleware
 @app.middleware("http")
@@ -115,6 +131,8 @@ app.include_router(recipe_router)
 app.include_router(auth_router)
 app.include_router(ai_assistant_router, prefix="/ai", tags=["AI Assistant"])
 app.include_router(user_profile_router, prefix="/users", tags=["User Profile"])
+app.include_router(stripe_router, prefix="/payment", tags=["Payment"])
+app.include_router(subscription_router, tags=["Subscription"])
 
 
 # Health check endpoint

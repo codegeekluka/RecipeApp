@@ -24,12 +24,49 @@ const ImageCropper = ({
   const onCropCompleteInternal = useCallback((croppedArea, croppedAreaPixels) => {
     console.log('Crop complete - croppedArea:', croppedArea);
     console.log('Crop complete - croppedAreaPixels:', croppedAreaPixels);
-    setCroppedAreaPixels(croppedAreaPixels);
+    if (croppedAreaPixels && croppedAreaPixels.width > 0 && croppedAreaPixels.height > 0) {
+      setCroppedAreaPixels(croppedAreaPixels);
+    }
   }, []);
+
+  // Also capture crop changes to ensure we always have a valid crop area
+  const onCropChange = useCallback((crop) => {
+    setCrop(crop);
+    // Force a crop complete call to ensure we have the latest crop area
+    if (imageSrc) {
+      // This will trigger onCropCompleteInternal with the current crop
+      setTimeout(() => {
+        // The onCropCompleteInternal should be called automatically by react-easy-crop
+      }, 100);
+    }
+  }, [imageSrc]);
+
+  // Set initial crop area when component mounts or image changes
+  useEffect(() => {
+    if (imageSrc && !croppedAreaPixels) {
+      // Wait a bit for the image to load, then set a default crop area
+      const timer = setTimeout(() => {
+        if (!croppedAreaPixels) {
+          const defaultCropArea = {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: aspectRatio === 1 ? 100 : 100 / aspectRatio
+          };
+          console.log('Setting default crop area after timeout:', defaultCropArea);
+          setCroppedAreaPixels(defaultCropArea);
+        }
+      }, 1000); // Wait 1 second for image to load
+      
+      return () => clearTimeout(timer);
+    }
+  }, [imageSrc, aspectRatio, croppedAreaPixels]);
 
   const getCroppedImg = useCallback(async () => {
     if (!croppedAreaPixels) {
-      console.log('No cropped area pixels available');
+      console.log('No cropped area pixels available, using current crop position');
+      // If we don't have croppedAreaPixels, we'll need to calculate them from the current crop
+      // For now, let's return null and let the user know they need to adjust the crop
       return null;
     }
 
@@ -107,12 +144,19 @@ const ImageCropper = ({
     console.log('Apply crop clicked');
     console.log('Current croppedAreaPixels:', croppedAreaPixels);
     
+    if (!croppedAreaPixels) {
+      console.log('No crop area available, please adjust the crop area first');
+      alert('Please adjust the crop area first by dragging the image or crop box');
+      return;
+    }
+    
     const croppedFile = await getCroppedImg();
     if (croppedFile) {
       console.log('Cropped file created:', croppedFile);
       onCropComplete(croppedFile);
     } else {
       console.log('Failed to create cropped file');
+      alert('Failed to create cropped image. Please try again.');
     }
   };
 
@@ -122,9 +166,8 @@ const ImageCropper = ({
     return null;
   }
 
-  // Check if we can enable the apply button - only need valid crop area
-  const canApplyCrop = croppedAreaPixels && 
-    croppedAreaPixels.width > 0 && croppedAreaPixels.height > 0;
+  // Check if we can enable the apply button - enable if we have an image
+  const canApplyCrop = !!imageSrc;
 
   console.log('Can apply crop:', canApplyCrop, {
     hasCroppedArea: !!croppedAreaPixels,
@@ -148,7 +191,7 @@ const ImageCropper = ({
                 crop={crop}
                 zoom={zoom}
                 aspect={aspectRatio}
-                onCropChange={setCrop}
+                onCropChange={onCropChange}
                 onZoomChange={setZoom}
                 onCropComplete={onCropCompleteInternal}
                 cropShape={cropShape === 'circle' ? 'round' : 'rect'}

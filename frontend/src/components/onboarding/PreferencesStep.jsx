@@ -18,10 +18,6 @@ const PreferencesStep = ({ formData, updateFormData, onPrev, onSkip, onComplete,
 
   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    fetchPreferenceOptions();
-  }, [fetchPreferenceOptions]);
-
   const fetchPreferenceOptions = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8000/users/me/preferences/options', {
@@ -64,6 +60,10 @@ const PreferencesStep = ({ formData, updateFormData, onPrev, onSkip, onComplete,
       setPreferenceOptions(fallbackOptions);
     }
   }, [token]);
+
+  useEffect(() => {
+    fetchPreferenceOptions();
+  }, [fetchPreferenceOptions]);
 
   const handleCheckboxChange = (field, value) => {
     const currentValues = formData[field] || [];

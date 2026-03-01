@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { FavoriteIcon, ActiveIcon } from "../ui/Icons";
+import { FavoriteIcon } from "../ui/Icons";
 import { toggleFavorite } from "../../services/toggleFavorite";
-import { toggleActive } from "../../services/toggleActive";
 import '../../styles/recipes/RecipeHero.css'
 import DeleteButton from '../ui/DeleteButton';
 import EditButton from '../ui/EditButton';
@@ -9,10 +8,11 @@ import ReturnBtn from '../ui/ReturnBtn';
 import TagsManager from "../ui/AddTags";
 import TagsPills from "../ui/TagsPills";
 import { AuthContext } from "../../contexts/AuthContext";
+import ComingSoonModal from "../ui/ComingSoonModal";
 
 export default function RecipeHero({ recipe, tags, onAddTag, onRemoveTag, editMode, startEditing, saveRecipe, cancelEditing, navigate }) {
   const [isFavorite, setIsFavorite] = useState(recipe.is_favorite || false);
-  const [isActive, setIsActive] = useState(recipe.is_active || false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const token = localStorage.getItem("token");
   const { origin, clearNavOrigin } = useContext(AuthContext)
 
@@ -21,13 +21,6 @@ export default function RecipeHero({ recipe, tags, onAddTag, onRemoveTag, editMo
     try {
       const newStatus = await toggleFavorite(recipe.slug, token);
       setIsFavorite(newStatus);
-    } catch {}
-  };
-
-  const handleActiveClick = async () => {
-    try {
-      const newStatus = await toggleActive(recipe.slug, token);
-      setIsActive(newStatus);
     } catch {}
   };
 
@@ -80,10 +73,23 @@ export default function RecipeHero({ recipe, tags, onAddTag, onRemoveTag, editMo
         <button className="icon-button" onClick={handleFavoriteClick} title={isFavorite ? "Unfavorite" : "Favorite"}>
           <FavoriteIcon active={isFavorite} />
         </button>
-        <button className="icon-button" onClick={handleActiveClick} title={isActive ? "Deactivate" : "Activate"}>
-          <ActiveIcon active={isActive} />
+        <button className="icon-button" onClick={() => setShowShareModal(true)} title="Share Recipe">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
         </button>
       </div>}
+
+      <ComingSoonModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        title="Coming Soon"
+        message="Share your recipes with your friends!"
+      />
     </div>
   );
 }

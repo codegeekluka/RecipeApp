@@ -1,7 +1,7 @@
 import '../styles/pages/Home.css'
 import Login from './Login.jsx'
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import RecipeCarousel from '../components/pages/RecipeCarousel.jsx';
 import PillNav from '../components/layout/PillNav.jsx';
@@ -59,6 +59,10 @@ const Home = () => {
     navigate(`/recipe/${slug}`)
   }
 
+  const handleAddMoreClick = () => {
+    navigate('/add-recipe');
+  }
+
   // Filter recipes for different carousels
   const favoriteRecipes = recipes.filter(recipe => recipe.favorite);
   
@@ -105,31 +109,37 @@ const Home = () => {
           recipes={favoriteRecipes}
           title="Your Favorites"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
         <RecipeCarousel 
           recipes={easyRecipes}
           title="Easy Recipes"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
         <RecipeCarousel 
           recipes={cheapRecipes}
           title="Budget-Friendly"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
         <RecipeCarousel 
           recipes={quickRecipes}
           title="Quick & Easy"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
         <RecipeCarousel 
           recipes={healthyRecipes}
           title="Healthy Options"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
         <RecipeCarousel 
           recipes={recipes}
           title="All Your Recipes"
           onCardClick={handleCardClick}
+          onAddMoreClick={handleAddMoreClick}
         />
       </div>
     </div>

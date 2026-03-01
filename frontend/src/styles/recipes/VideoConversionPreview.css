@@ -1,0 +1,262 @@
+.video-conversion-section {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border-glass);
+  border-radius: 20px;
+  padding: 32px;
+  margin: 40px 0;
+  box-shadow: var(--shadow-lg);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.video-platforms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.platform-card {
+  background: var(--color-background-glass-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.platform-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.platform-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.platform-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.tiktok-icon {
+  background: linear-gradient(135deg, #000000, #ff0050);
+  color: white;
+}
+
+.youtube-icon {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: white;
+}
+
+.platform-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.platform-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.platform-description {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.platform-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--color-background-glass);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.feature-item svg {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.platform-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  margin-top: auto;
+}
+
+.tiktok-button {
+  background: linear-gradient(135deg, #000000, #ff0050);
+  color: white;
+}
+
+.tiktok-button:hover {
+  background: linear-gradient(135deg, #ff0050, #000000);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.youtube-button {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: white;
+}
+
+.youtube-button:hover {
+  background: linear-gradient(135deg, #cc0000, #ff0000);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.platform-button:active {
+  transform: translateY(0);
+}
+
+.platform-button svg {
+  flex-shrink: 0;
+}
+
+.video-mvp-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--color-background-glass-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.video-mvp-notice svg {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-conversion-section {
+    padding: 24px;
+    margin: 32px 0;
+  }
+
+
+  .video-platforms {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .platform-card {
+    padding: 20px;
+  }
+
+  .platform-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .platform-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .platform-description {
+    font-size: 0.9rem;
+  }
+
+  .feature-item {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .platform-button {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+
+  .video-mvp-notice {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-conversion-section {
+    padding: 20px;
+    margin: 24px 0;
+  }
+
+
+  .platform-card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .platform-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .platform-content h3 {
+    font-size: 1rem;
+  }
+
+  .platform-description {
+    font-size: 0.85rem;
+  }
+
+  .feature-item {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+  }
+
+  .platform-button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .platform-button span {
+    font-size: 0.9rem;
+  }
+}
+

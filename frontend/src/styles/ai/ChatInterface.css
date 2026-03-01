@@ -41,6 +41,42 @@
   align-items: center;
 }
 
+/* Session Counter */
+.session-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.session-counter.premium {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.session-counter-label {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.session-counter.premium .session-counter-label {
+  color: #8b6914;
+}
+
+.session-counter-value {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.session-counter.premium .session-counter-value {
+  color: #d4af37;
+  font-size: 1.1rem;
+}
+
 .info-button {
   width: 40px;
   height: 40px;

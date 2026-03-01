@@ -76,6 +76,7 @@ const Onboarding = () => {
       <PreferencesStep
         formData={formData}
         updateFormData={updateFormData}
+        onPrev={() => {}} // No-op since we're already at the start
         onSkip={skipOnboarding}
         onComplete={handleSubmit}
         loading={loading}

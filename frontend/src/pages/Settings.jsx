@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
 import axios from 'axios';
 import ImageCropper from '../components/ui/ImageCropper';
+import ImageActionDropdown from '../components/ui/ImageActionDropdown';
 import ReturnBtn from '../components/ui/ReturnBtn';
 import { SunIcon, MoonIcon, ComputerIcon } from '../components/ui/Icons';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
@@ -8,6 +9,8 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigate } from 'react-router-dom';
 import photoPlaceholder from '../assets/photo.png';
+import subscriptionService from '../services/subscriptionService';
+import UpgradeModal from '../components/ui/UpgradeModal';
 import '../styles/settings/Settings.css';
 import '../styles/onboarding/shared.css';
 
@@ -31,6 +34,9 @@ const Settings = () => {
   const [showHeroCropper, setShowHeroCropper] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState(null);
   const [tempImageType, setTempImageType] = useState(null);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
   
   const profileInputRef = useRef();
   const heroInputRef = useRef();
@@ -61,6 +67,19 @@ const Settings = () => {
   useEffect(() => {
     fetchUserProfile();
     fetchPreferenceOptions();
+    
+    // Fetch subscription status
+    const fetchSubscription = async () => {
+      try {
+        const status = await subscriptionService.getSubscriptionStatus();
+        setSubscriptionStatus(status);
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+      } finally {
+        setIsLoadingSubscription(false);
+      }
+    };
+    fetchSubscription();
   }, [fetchUserProfile, fetchPreferenceOptions]);
 
   const handleBackClick = () => {
@@ -127,32 +146,37 @@ const Settings = () => {
   };
 
   const handleCropComplete = async (croppedFile) => {
+    console.log('handleCropComplete called with file:', croppedFile);
+    console.log('tempImageType:', tempImageType);
+    
     if (tempImageType === 'profile') {
+      console.log('Uploading profile image...');
       await uploadProfileImage(croppedFile);
       setShowProfileCropper(false);
     } else {
+      console.log('Uploading hero image...');
       await uploadHeroImage(croppedFile);
       setShowHeroCropper(false);
     }
     
-    // Clean up
-    if (tempImageSrc) {
+    // Clean up blob URLs (from file upload or image editing)
+    if (tempImageSrc && tempImageSrc.startsWith('blob:')) {
       URL.revokeObjectURL(tempImageSrc);
-      setTempImageSrc(null);
-      setTempImageType(null);
     }
+    setTempImageSrc(null);
+    setTempImageType(null);
   };
 
   const handleCropCancel = () => {
     setShowProfileCropper(false);
     setShowHeroCropper(false);
     
-    // Clean up
-    if (tempImageSrc) {
+    // Clean up blob URLs (from file upload or image editing)
+    if (tempImageSrc && tempImageSrc.startsWith('blob:')) {
       URL.revokeObjectURL(tempImageSrc);
-      setTempImageSrc(null);
-      setTempImageType(null);
     }
+    setTempImageSrc(null);
+    setTempImageType(null);
   };
 
   const uploadProfileImage = async (file) => {
@@ -202,6 +226,35 @@ const Settings = () => {
     }
   };
 
+  const deleteProfilePicture = async () => {
+    try {
+      await axios.delete('http://localhost:8000/users/me/delete-profile-picture', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setUserProfile(prev => ({ ...prev, profile_picture_url: null }));
+      
+      // Refresh user profile in AuthContext to update navbar
+      await refreshUserProfile();
+    } catch (error) {
+      console.error('Error deleting profile picture:', error);
+      alert('Failed to delete profile picture. Please try again.');
+    }
+  };
+
+  const deleteHeroImage = async () => {
+    try {
+      await axios.delete('http://localhost:8000/users/me/delete-hero-image', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setUserProfile(prev => ({ ...prev, hero_image_url: null }));
+    } catch (error) {
+      console.error('Error deleting hero image:', error);
+      alert('Failed to delete hero image. Please try again.');
+    }
+  };
+
   const triggerProfileUpload = () => {
     console.log('Profile upload triggered');
     if (profileInputRef.current) {
@@ -217,6 +270,72 @@ const Settings = () => {
       heroInputRef.current.click();
     } else {
       console.error('Hero input ref is null');
+    }
+  };
+
+  const editProfileImage = async () => {
+    if (userProfile.profile_picture_url) {
+      const fullImageUrl = getImageUrl(userProfile.profile_picture_url);
+      console.log('Editing profile image, URL:', fullImageUrl);
+      
+      try {
+        // Convert the image URL to a blob to avoid CORS issues
+        const response = await fetch(fullImageUrl, {
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        setTempImageSrc(blobUrl);
+        setTempImageType('profile');
+        setShowProfileCropper(true);
+      } catch (error) {
+        console.error('Error loading image for editing:', error);
+        // Fallback to direct URL if blob conversion fails
+        console.log('Falling back to direct URL');
+        setTempImageSrc(fullImageUrl);
+        setTempImageType('profile');
+        setShowProfileCropper(true);
+      }
+    }
+  };
+
+  const editHeroImage = async () => {
+    if (userProfile.hero_image_url) {
+      const fullImageUrl = getImageUrl(userProfile.hero_image_url);
+      console.log('Editing hero image, URL:', fullImageUrl);
+      
+      try {
+        // Convert the image URL to a blob to avoid CORS issues
+        const response = await fetch(fullImageUrl, {
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        setTempImageSrc(blobUrl);
+        setTempImageType('hero');
+        setShowHeroCropper(true);
+      } catch (error) {
+        console.error('Error loading image for editing:', error);
+        // Fallback to direct URL if blob conversion fails
+        console.log('Falling back to direct URL');
+        setTempImageSrc(fullImageUrl);
+        setTempImageType('hero');
+        setShowHeroCropper(true);
+      }
     }
   };
 
@@ -321,6 +440,12 @@ const Settings = () => {
             onClick={() => setActiveTab('appearance')}
           >
             Appearance
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'subscription' ? 'active' : ''}`}
+            onClick={() => setActiveTab('subscription')}
+          >
+            Subscription
           </button>
         </div>
 
@@ -544,18 +669,21 @@ const Settings = () => {
               <div className="form-group">
                 <label className="form-label">Profile Picture</label>
                 <div className="image-upload-container">
-                  <div 
-                    className={`image-upload-area ${userProfile.profile_picture_url ? 'has-image' : ''}`}
-                    onClick={() => {
-                      console.log('Profile image area clicked');
-                      triggerProfileUpload();
-                    }}
-                    onMouseDown={() => console.log('Profile image area mouse down')}
-                    onMouseUp={() => console.log('Profile image area mouse up')}
-                  >
-                    {getProfileDisplay()}
+                  <div className="image-upload-wrapper">
+                    <div 
+                      className={`image-upload-area ${userProfile.profile_picture_url ? 'has-image' : ''}`}
+                    >
+                      {getProfileDisplay()}
+                    </div>
+                    <ImageActionDropdown
+                      onEdit={editProfileImage}
+                      onDelete={deleteProfilePicture}
+                      onSelectNew={() => triggerProfileUpload()}
+                      isVisible={true}
+                      hasImage={!!userProfile.profile_picture_url}
+                    />
                   </div>
-                  <p className="upload-text">Click to upload your profile picture</p>
+                  <p className="upload-text">Use the menu to manage your profile picture</p>
                   <p className="upload-hint">Recommended: Square image, 200x200px or larger</p>
                   {uploadingProfile && <p className="upload-hint">Uploading...</p>}
                 </div>
@@ -574,19 +702,26 @@ const Settings = () => {
 
               <div className="form-group">
                 <label className="form-label">Hero Section Image</label>
-                <div 
-                  className={`hero-image-upload ${userProfile.hero_image_url ? 'has-image' : ''}`}
-                  onClick={() => {
-                    console.log('Hero image area clicked');
-                    triggerHeroUpload();
-                  }}
-                >
-                  {getHeroDisplay()}
+                <div className="hero-image-upload-container">
+                  <div className="hero-image-upload-wrapper">
+                    <div 
+                      className={`hero-image-upload ${userProfile.hero_image_url ? 'has-image' : ''}`}
+                    >
+                      {getHeroDisplay()}
+                    </div>
+                    <ImageActionDropdown
+                      onEdit={editHeroImage}
+                      onDelete={deleteHeroImage}
+                      onSelectNew={() => triggerHeroUpload()}
+                      isVisible={true}
+                      hasImage={!!userProfile.hero_image_url}
+                    />
+                  </div>
+                  <p className="upload-hint" style={{ textAlign: 'center', marginTop: '8px' }}>
+                    Use the menu to manage your hero image. This will be displayed on every page's hero section.
+                  </p>
+                  {uploadingHero && <p className="upload-hint" style={{ textAlign: 'center' }}>Uploading...</p>}
                 </div>
-                <p className="upload-hint" style={{ textAlign: 'center', marginTop: '8px' }}>
-                  This will be displayed on every pages hero section
-                </p>
-                {uploadingHero && <p className="upload-hint" style={{ textAlign: 'center' }}>Uploading...</p>}
                 <input
                   ref={heroInputRef}
                   type="file"
@@ -599,6 +734,89 @@ const Settings = () => {
                   }}
                 />
               </div>
+            </div>
+          )}
+
+          {activeTab === 'subscription' && (
+            <div className="subscription-tab">
+              {isLoadingSubscription ? (
+                <div className="subscription-loading">
+                  <LoadingSpinner />
+                  <p>Loading subscription status...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="subscription-status-card">
+                    <h3 className="subscription-title">Your Subscription</h3>
+                    
+                    {subscriptionStatus?.is_premium ? (
+                      <div className="subscription-premium">
+                        <div className="premium-badge">
+                          <span className="premium-icon">✨</span>
+                          <span>Premium Member</span>
+                        </div>
+                        <p className="subscription-description">
+                          You have unlimited AI cooking sessions!
+                        </p>
+                        <div className="premium-benefits">
+                          <h4>Premium Benefits:</h4>
+                          <ul>
+                            <li>✨ Unlimited AI cooking sessions</li>
+                            <li>🎯 Priority support</li>
+                            <li>🚀 Early access to new features</li>
+                            <li>💎 Ad-free experience</li>
+                          </ul>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="subscription-free">
+                        <div className="free-badge">
+                          <span>Free Plan</span>
+                        </div>
+                        <div className="session-usage">
+                          <div className="session-stats">
+                            <span className="session-label">Sessions Used:</span>
+                            <span className="session-value">
+                              {subscriptionStatus?.sessions_used || 0} / {subscriptionStatus?.sessions_limit || 3}
+                            </span>
+                          </div>
+                          <div className="session-progress">
+                            <div 
+                              className="session-progress-bar"
+                              style={{
+                                width: `${((subscriptionStatus?.sessions_used || 0) / (subscriptionStatus?.sessions_limit || 3)) * 100}%`
+                              }}
+                            />
+                          </div>
+                          <p className="session-remaining">
+                            {subscriptionStatus?.sessions_remaining || 0} sessions remaining
+                          </p>
+                        </div>
+                        <p className="subscription-description">
+                          Upgrade to Premium for unlimited AI cooking sessions and exclusive features!
+                        </p>
+                        <button 
+                          className="btn btn-primary upgrade-button"
+                          onClick={() => setShowUpgradeModal(true)}
+                        >
+                          Upgrade to Premium
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {subscriptionStatus && !subscriptionStatus.is_premium && (
+                    <div className="subscription-info">
+                      <h4>About Free Sessions</h4>
+                      <ul>
+                        <li>You get 3 free AI cooking sessions</li>
+                        <li>Sessions reset every 30 days</li>
+                        <li>Premium members get unlimited sessions</li>
+                      </ul>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>
@@ -636,6 +854,23 @@ const Settings = () => {
           title="Crop Cover Photo"
         />
       )}
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        sessionsUsed={subscriptionStatus?.sessions_used || 0}
+        sessionsLimit={subscriptionStatus?.sessions_limit || 3}
+        onUpgradeSuccess={async () => {
+          // Refresh subscription status after upgrade
+          try {
+            const status = await subscriptionService.getSubscriptionStatus();
+            setSubscriptionStatus(status);
+          } catch (err) {
+            console.error('Failed to refresh subscription:', err);
+          }
+        }}
+      />
     </div>
   );
 };

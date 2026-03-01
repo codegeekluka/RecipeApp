@@ -11,6 +11,9 @@ import BottomNav from '../components/layout/BottomNav.jsx';
 import ChatMessage from '../components/ai/ChatMessage.jsx';
 import AiPageRecipeCard from '../components/ai/AiPageRecipeCard.jsx';
 import ChatInput from '../components/ai/ChatInput.jsx';
+import RecipeActivationModal from '../components/ai/RecipeActivationModal.jsx';
+import UpgradeModal from '../components/ui/UpgradeModal.jsx';
+import subscriptionService from '../services/subscriptionService';
 
 const Cheffy = () => {
   const { userProfile } = useContext(AuthContext);
@@ -20,7 +23,6 @@ const Cheffy = () => {
     isRecording,
     isLoading,
     error,
-    isWakeWordListening,
     sessionStatus,
     servicesInitialized,
     initializeServices,
@@ -30,7 +32,12 @@ const Cheffy = () => {
     setIsRecording,
     endSession,
     clearError,
-    checkExistingSession
+    checkExistingSession,
+    showUpgradeModal,
+    upgradeModalData,
+    closeUpgradeModal,
+    subscriptionStatus,
+    setSubscriptionStatus
   } = useAIAssistantStore();
 
   const [inputMessage, setInputMessage] = useState('');
@@ -41,8 +48,11 @@ const Cheffy = () => {
   const [pendingRecipeId, setPendingRecipeId] = useState(null);
   const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
   const messagesEndRef = React.useRef(null);
   const inputRef = React.useRef(null);
+  const sessionIdRef = React.useRef(null);
 
   // Helper function to construct full image URL
   const getImageUrl = (relativeUrl) => {
@@ -88,10 +98,11 @@ const Cheffy = () => {
         </svg>
       </button>
       <div className="help-content">
-        <h4>Getting Started</h4>
+                <h4>Getting Started</h4>
         <ol>
           <li>Make sure you have an active recipe selected</li>
           <li>Click "Start Session" above</li>
+          <li>Use the microphone button to record voice commands</li>
           <li>I'll guide you through the cooking process!</li>
         </ol>
         <h4>I can help you with:</h4>
@@ -111,14 +122,20 @@ const Cheffy = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Update sessionId ref when sessionId changes
+  useEffect(() => {
+    sessionIdRef.current = sessionId;
+  }, [sessionId]);
+
   // Handle session cleanup on unmount
   useEffect(() => {
     return () => {
-      if (sessionId) {
+      // Only end session on actual component unmount, not on re-renders
+      if (sessionIdRef.current) {
         endSession();
       }
     };
-  }, [sessionId, endSession]);
+  }, []); // Empty dependency array - only run on mount/unmount
 
   // Handle click outside to close help dropdown
   useEffect(() => {
@@ -189,12 +206,11 @@ const Cheffy = () => {
   useEffect(() => {
     console.log('Cheffy: State updated:', {
       servicesInitialized,
-      isWakeWordListening,
       sessionStatus,
       sessionId,
       isRecording
     });
-  }, [servicesInitialized, isWakeWordListening, sessionStatus, sessionId, isRecording]);
+  }, [servicesInitialized, sessionStatus, sessionId, isRecording]);
 
   // Fetch active recipe on component mount
   useEffect(() => {
@@ -214,6 +230,22 @@ const Cheffy = () => {
 
     fetchActiveRecipe();
   }, []);
+
+  // Fetch subscription status on mount
+  useEffect(() => {
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const status = await subscriptionService.getSubscriptionStatus();
+        setSubscriptionStatus(status);
+      } catch (error) {
+        console.error('Failed to fetch subscription status:', error);
+      } finally {
+        setIsLoadingSubscription(false);
+      }
+    };
+
+    fetchSubscriptionStatus();
+  }, [setSubscriptionStatus]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -346,6 +378,19 @@ const Cheffy = () => {
     }
   };
 
+  const handleRecipeActivated = async () => {
+    // Refresh active recipe after activation
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const activeRecipe = await getActiveRecipe(token);
+        setActiveRecipe(activeRecipe);
+      }
+    } catch (error) {
+      console.error('Failed to fetch active recipe:', error);
+    }
+  };
+
   if (error) {
     return (
       <div className="cheffy-container">
@@ -402,12 +447,40 @@ const Cheffy = () => {
 
         {/* Centered Recipe Card - Only show when no session, floating above chat */}
         {!sessionId && (
-          <AiPageRecipeCard
-            activeRecipe={activeRecipe}
-            isLoadingActiveRecipe={isLoadingActiveRecipe}
-            onStartCooking={handleStartCooking}
-            isLoading={isLoading}
-          />
+          <div className="ai-recipe-selection-container">
+            {activeRecipe ? (
+              <AiPageRecipeCard
+                activeRecipe={activeRecipe}
+                isLoadingActiveRecipe={isLoadingActiveRecipe}
+                onStartCooking={handleStartCooking}
+                isLoading={isLoading}
+              />
+            ) : (
+              <div className="no-active-recipe-prompt">
+                <div className="prompt-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <h3>No Active Recipe</h3>
+                <p>Select a recipe to start cooking with Cheffy AI Assistant</p>
+                <button
+                  className="browse-recipes-button"
+                  onClick={() => setShowRecipeModal(true)}
+                >
+                  Browse Recipes
+                </button>
+              </div>
+            )}
+            {activeRecipe && (
+              <button
+                className="browse-recipes-button-secondary"
+                onClick={() => setShowRecipeModal(true)}
+              >
+                Browse Recipes
+              </button>
+            )}
+          </div>
         )}
 
         {/* Chat Interface */}
@@ -418,15 +491,29 @@ const Cheffy = () => {
               <>
                 <h3>Cooking: {activeRecipe.title}</h3>
                 <div className="header-actions">
+                  {/* Session Counter */}
+                  {subscriptionStatus && !subscriptionStatus.is_premium && (
+                    <div className="session-counter">
+                      <span className="session-counter-label">Sessions:</span>
+                      <span className="session-counter-value">
+                        {subscriptionStatus.sessions_used} / {subscriptionStatus.sessions_limit}
+                      </span>
+                    </div>
+                  )}
+                  {subscriptionStatus && subscriptionStatus.is_premium && (
+                    <div className="session-counter premium">
+                      <span className="session-counter-label">Premium</span>
+                      <span className="session-counter-value">∞</span>
+                    </div>
+                  )}
                                      <button 
-                     className={`session-active-button ${isWakeWordListening ? 'listening' : ''}`}
+                     className={`session-active-button ${isRecording ? 'listening' : ''}`}
                      disabled
                    >
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                      </svg>
                      {!servicesInitialized ? 'Initializing...' : 
-                      isWakeWordListening ? 'Listening for "Hey Cheffy"' : 
                       sessionStatus === 'listening' ? 'Recording...' :
                       sessionStatus === 'thinking' ? 'Processing...' :
                       sessionStatus === 'speaking' ? 'Speaking...' : 'Active'}
@@ -438,28 +525,6 @@ const Cheffy = () => {
                    >
                      End Session
                    </button>
-                   {servicesInitialized && (
-                     <button 
-                       className="test-wake-word-button"
-                       onClick={() => {
-                         console.log('Manual wake word test triggered');
-                         // Manually trigger wake word detection
-                         const { onWakeWordDetected } = useAIAssistantStore.getState();
-                         onWakeWordDetected();
-                       }}
-                       style={{
-                         background: '#4CAF50',
-                         color: 'white',
-                         border: 'none',
-                         padding: '8px 12px',
-                         borderRadius: '4px',
-                         marginLeft: '8px',
-                         fontSize: '12px'
-                       }}
-                     >
-                       Test Wake Word
-                     </button>
-                   )}
                 </div>
               </>
             ) : (
@@ -557,6 +622,27 @@ const Cheffy = () => {
        
        {/* Help Dropdown Portal */}
        {showHelpDropdown && createPortal(<HelpDropdown />, document.body)}
+       
+       {/* Recipe Activation Modal */}
+       <RecipeActivationModal
+         isOpen={showRecipeModal}
+         onClose={() => setShowRecipeModal(false)}
+         onRecipeActivated={handleRecipeActivated}
+       />
+       
+       {/* Upgrade Modal */}
+       <UpgradeModal
+         isOpen={showUpgradeModal}
+         onClose={closeUpgradeModal}
+         sessionsUsed={upgradeModalData?.sessionsUsed || 3}
+         sessionsLimit={upgradeModalData?.sessionsLimit || 3}
+         onUpgradeSuccess={() => {
+           // Refresh subscription status after upgrade
+           subscriptionService.getSubscriptionStatus()
+             .then(status => setSubscriptionStatus(status))
+             .catch(err => console.error('Failed to refresh subscription:', err));
+         }}
+       />
      </div>
    );
  };

@@ -12,6 +12,26 @@ class TTSService {
     try {
       // Initialize Web Audio API context
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Resume audio context if suspended (required for autoplay)
+      if (this.audioContext.state === 'suspended') {
+        // Try to resume on user interaction
+        const resumeAudio = async () => {
+          try {
+            await this.audioContext.resume();
+            console.log('TTS: Audio context resumed on user interaction');
+            document.removeEventListener('click', resumeAudio);
+            document.removeEventListener('touchstart', resumeAudio);
+          } catch (error) {
+            console.error('TTS: Failed to resume audio context:', error);
+          }
+        };
+        
+        // Listen for user interaction to resume
+        document.addEventListener('click', resumeAudio, { once: true });
+        document.addEventListener('touchstart', resumeAudio, { once: true });
+      }
+      
       console.log('TTS service initialized successfully');
       return true;
     } catch (error) {
@@ -28,6 +48,12 @@ class TTSService {
         this.currentAudio = null;
       }
 
+      // Resume audio context if suspended (required for autoplay)
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        await this.audioContext.resume();
+        console.log('TTS: Audio context resumed');
+      }
+
       // Construct full URL if it's a relative path
       const fullUrl = audioUrl.startsWith('http') ? audioUrl : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}${audioUrl}`;
       console.log('TTS: Playing audio from URL:', fullUrl);
@@ -35,6 +61,7 @@ class TTSService {
       // Create audio element for streaming
       const audio = new Audio();
       audio.crossOrigin = 'anonymous';
+      audio.preload = 'auto';
       
       // Set up audio event handlers
       audio.onloadstart = () => {
@@ -43,29 +70,87 @@ class TTSService {
         this.currentAudio = audio;
       };
 
-      audio.oncanplay = () => {
-        console.log('TTS: Audio can start playing');
-        audio.play().catch(error => {
-          console.error('TTS: Failed to play audio:', error);
-        });
-      };
+      // Set up event handlers before setting src
+      const playPromise = new Promise((resolve, reject) => {
+        let playbackStarted = false;
 
-      audio.onended = () => {
-        console.log('TTS: Audio playback ended');
-        this.isPlaying = false;
-        this.currentAudio = null;
-        this.processQueue();
-      };
+        audio.onloadeddata = async () => {
+          console.log('TTS: Audio data loaded');
+          if (!playbackStarted) {
+            playbackStarted = true;
+            try {
+              // Resume audio context if needed
+              if (this.audioContext && this.audioContext.state === 'suspended') {
+                await this.audioContext.resume();
+                console.log('TTS: Audio context resumed');
+              }
+              
+              await audio.play();
+              console.log('TTS: Audio playback started successfully');
+            } catch (error) {
+              console.error('TTS: Failed to play audio:', error);
+              // Don't reject here, let onerror handle it
+            }
+          }
+        };
 
-      audio.onerror = (error) => {
-        console.error('TTS: Audio playback error:', error);
-        this.isPlaying = false;
-        this.currentAudio = null;
-        this.processQueue();
-      };
+        audio.oncanplay = async () => {
+          console.log('TTS: Audio can start playing');
+          if (!playbackStarted) {
+            playbackStarted = true;
+            try {
+              // Resume audio context if needed
+              if (this.audioContext && this.audioContext.state === 'suspended') {
+                await this.audioContext.resume();
+                console.log('TTS: Audio context resumed in oncanplay');
+              }
+              
+              await audio.play();
+              console.log('TTS: Audio playback started from oncanplay');
+            } catch (error) {
+              console.error('TTS: Failed to play audio in oncanplay:', error);
+              // Try one more time after a short delay
+              setTimeout(async () => {
+                try {
+                  await audio.play();
+                  console.log('TTS: Audio playback started after retry');
+                } catch (retryError) {
+                  console.error('TTS: Failed to play audio after retry:', retryError);
+                }
+              }, 100);
+            }
+          }
+        };
+
+        audio.onerror = (error) => {
+          console.error('TTS: Audio playback error:', error, audio.error);
+          this.isPlaying = false;
+          this.currentAudio = null;
+          reject(new Error(`Audio playback failed: ${audio.error?.message || 'Unknown error'}`));
+        };
+
+        audio.onended = () => {
+          console.log('TTS: Audio playback ended');
+          this.isPlaying = false;
+          this.currentAudio = null;
+          resolve();
+        };
+
+        // Set timeout to reject if audio doesn't load
+        setTimeout(() => {
+          if (!playbackStarted && audio.readyState < 2) {
+            console.error('TTS: Audio loading timeout');
+            reject(new Error('Audio loading timeout'));
+          }
+        }, 10000); // 10 second timeout
+      });
 
       // Start loading the audio stream
       audio.src = fullUrl;
+      audio.load(); // Explicitly load the audio
+      
+      // Wait for playback to complete or error
+      await playPromise;
       
       return true;
     } catch (error) {

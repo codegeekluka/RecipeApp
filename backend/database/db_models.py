@@ -73,6 +73,9 @@ class Recipe(BaseModel):
     sessions = relationship(
         "UserSession", back_populates="recipe", cascade="all, delete-orphan"
     )
+    notes = relationship(
+        "RecipeNote", back_populates="recipe", cascade="all, delete-orphan"
+    )
 
     # SQLAlchemy handles object creation automatically
 
@@ -126,6 +129,10 @@ class User(BaseModel):
     )
     skill_level_rel = relationship(
         "UserSkillLevel", uselist=False, cascade="all, delete-orphan"
+    )
+    recipe_notes = relationship("RecipeNote", cascade="all, delete-orphan")
+    subscription = relationship(
+        "UserSubscription", uselist=False, cascade="all, delete-orphan"
     )
 
     def __repr__(self):  # how we want to represent the data/print it
@@ -326,6 +333,45 @@ class UserSkillLevel(Base):
 
     def __repr__(self):
         return f"Skill level '{self.skill_level}' for user {self.user_id}"
+
+
+class RecipeNote(BaseModel):
+    __tablename__ = "recipe_note"
+
+    user_id = Column(ForeignKey("user.id", ondelete="CASCADE"))
+    recipe_id = Column(ForeignKey("recipe.id", ondelete="CASCADE"))
+    note = Column("note", Text, nullable=True)
+    created_at = Column(
+        "created_at", DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at = Column("updated_at", DateTime(timezone=True), onupdate=func.now())
+
+    # Relationships
+    user = relationship("User", back_populates="recipe_notes")
+    recipe = relationship("Recipe", back_populates="notes")
+
+    def __repr__(self):
+        return f"Note for recipe {self.recipe_id} by user {self.user_id}"
+
+
+class UserSubscription(BaseModel):
+    __tablename__ = "user_subscription"
+
+    user_id = Column(
+        ForeignKey("user.id", ondelete="CASCADE"), unique=True, index=True
+    )
+    sessions_used = Column("sessions_used", Integer, default=0)
+    is_premium = Column("is_premium", Boolean, default=False)
+    last_reset_date = Column(
+        "last_reset_date", DateTime(timezone=True), server_default=func.now()
+    )
+    last_used = Column("last_used", DateTime(timezone=True), nullable=True)
+
+    # Relationship back to User
+    user = relationship("User", back_populates="subscription")
+
+    def __repr__(self):
+        return f"Subscription for user {self.user_id}: {self.sessions_used} sessions used, premium: {self.is_premium}"
 
 
 # Base.metadata.create_all(bind=engine) takes all classes that extends from base and creates them in the database, used for prototyping, ill uses alembic

@@ -286,6 +286,8 @@
     max-height: 400px;   /* or whatever max height you want */
     overflow-y: auto;    /* enable vertical scrolling when content overflows */
     padding: 10px 5px 10px 5px; /* top right bottom left */
+    display: flex;
+    flex-direction: column;
   }
   
   
@@ -401,6 +403,147 @@
     outline: none;
   }
 
+  /* Edit item wrapper - positions input/textarea and remove button */
+  .edit-item-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .edit-item-wrapper .ingredients-input,
+  .edit-item-wrapper .instructions-textarea {
+    flex: 1;
+    margin-bottom: 0 !important;
+  }
+
+  /* Remove button - small red X on the right */
+  .remove-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    background: #ef4444 !important;
+    color: white !important;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 0;
+    align-self: center;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .remove-item-btn:hover {
+    background: #dc2626 !important;
+    transform: scale(1.05);
+  }
+
+  .remove-item-btn:active {
+    transform: scale(0.95);
+  }
+
+  .remove-item-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: white !important;
+    fill: none;
+  }
+
+  /* Add button - icon + text, not full width, centered */
+  .add-item-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--color-background-glass-secondary, rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 8px auto 0;
+    align-self: center;
+  }
+
+  .add-item-btn:hover {
+    background: var(--color-background-glass, rgba(255, 255, 255, 0.15));
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .add-item-btn:active {
+    transform: translateY(0);
+  }
+
+  .add-item-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+
+  /* Mobile responsive styles for edit items */
+  @media (max-width: 768px) {
+    .edit-item-wrapper {
+      gap: 6px;
+    }
+
+    .remove-item-btn {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+    }
+
+    .remove-item-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .add-item-btn {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .add-item-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .remove-item-btn {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+    }
+
+    .remove-item-btn svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .add-item-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+      gap: 6px;
+    }
+
+    .add-item-btn svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
 
   
   .loader-container {
@@ -413,4 +556,128 @@
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Notes Tab Styles */
+  .notes-tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .notes-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: var(--color-background-glass);
+    color: var(--color-text-primary);
+    resize: vertical;
+    transition: border 0.2s ease;
+  }
+
+  .notes-textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+
+  .notes-textarea::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .save-note-btn {
+    align-self: flex-end;
+    padding: 10px 20px;
+    background: var(--color-primary, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .save-note-btn:hover:not(:disabled) {
+    background: var(--color-primary-dark, #7c3aed);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .save-note-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Reviews Tab Styles */
+  .reviews-tab-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 40px 20px;
+  }
+
+  .reviews-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .stars-placeholder {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .star-icon {
+    color: var(--color-text-muted, #9ca3af);
+    opacity: 0.5;
+  }
+
+  .reviews-placeholder-text {
+    color: var(--color-text-secondary);
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  /* Mobile responsive styles for notes and reviews */
+  @media (max-width: 768px) {
+    .notes-textarea {
+      min-height: 150px;
+      font-size: 14px;
+    }
+
+    .save-note-btn {
+      width: 100%;
+      align-self: stretch;
+    }
+
+    .star-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .notes-textarea {
+      min-height: 120px;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .star-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .reviews-placeholder-text {
+      font-size: 14px;
+    }
   }

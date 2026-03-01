@@ -1,0 +1,269 @@
+/* Planner Recipe Card Styles */
+.planner-recipe-card {
+  display: flex;
+  flex: 0 0 auto;
+  background: var(--color-background-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 200px;
+  height: 320px;
+  border: 1px solid var(--color-border-glass);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  position: relative;
+}
+
+/* Removed hover effect for recipe cards in modal */
+
+.planner-recipe-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-primary);
+  transform: translateY(-2px);
+}
+
+.recipe-image-container {
+  width: 100%;
+  height: 60%;
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  position: relative;
+}
+
+.recipe-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Removed image hover effect */
+
+.add-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--color-background-glass-secondary);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  color: var(--color-text-secondary);
+}
+
+.add-button:hover {
+  background: var(--color-background-glass);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+  color: var(--color-primary);
+}
+
+.add-button.selected {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.add-button.selected:hover {
+  background: var(--color-primary-hover);
+  transform: scale(1.1);
+}
+
+.recipe-content {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.recipe-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: left;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recipe-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.ingredient-availability {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.ingredient-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.ingredient-stat.available {
+  color: #10b981;
+}
+
+.ingredient-stat.missing {
+  color: #ef4444;
+}
+
+.ingredient-stat svg {
+  flex-shrink: 0;
+}
+
+.prep-time,
+.difficulty {
+  background: var(--color-background-glass-secondary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.tag {
+  background: var(--color-background-glass);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: var(--color-background-glass-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+.more-tags {
+  background: var(--color-background-glass-secondary);
+  color: var(--color-text-tertiary);
+  border-color: var(--color-border);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .planner-recipe-card {
+    width: 160px;
+    height: 280px;
+  }
+  
+  .recipe-content {
+    padding: 10px;
+    gap: 6px;
+  }
+  
+  .recipe-title {
+    font-size: 0.9rem;
+  }
+  
+  .recipe-details {
+    font-size: 0.75rem;
+  }
+  
+  .prep-time,
+  .difficulty {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+  
+  .tag {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+  }
+  
+  .add-button {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .add-button svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .planner-recipe-card {
+    width: 140px;
+    height: 240px;
+  }
+  
+  .recipe-content {
+    padding: 8px;
+    gap: 4px;
+  }
+  
+  .recipe-title {
+    font-size: 0.85rem;
+  }
+  
+  .recipe-details {
+    font-size: 0.7rem;
+  }
+  
+  .prep-time,
+  .difficulty {
+    padding: 2px 5px;
+    font-size: 0.65rem;
+  }
+  
+  .tag {
+    font-size: 0.55rem;
+    padding: 1px 3px;
+  }
+  
+  .add-button {
+    width: 24px;
+    height: 24px;
+    top: 6px;
+    right: 6px;
+  }
+  
+  .add-button svg {
+    width: 12px;
+    height: 12px;
+  }
+}

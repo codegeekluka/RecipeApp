@@ -17,8 +17,8 @@
     width: 300px;
     height: fit-content;
     background: var(--color-background-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -32,27 +32,31 @@
   }
   
   /* Content inside the card */
-  .modal-content {
+  .modal-card .modal-content {
     width: 100%;
     height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    background: transparent !important;
+    padding-right: 0;
+    position: relative;
+    z-index: 1;
   }
   
-  .modal-heading {
+  .modal-card .modal-heading {
     font-size: 20px;
     font-weight: 700;
     color: var(--color-text-primary);
   }
   
-  .modal-description {
+  .modal-card .modal-description {
     font-weight: 100;
     color: var(--color-text-secondary);
   }
   
   /* Button container */
-  .modal-button-wrapper {
+  .modal-card .modal-button-wrapper {
     width: 100%;
     display: flex;
     align-items: center;
@@ -61,7 +65,7 @@
   }
   
   /* Shared button styles */
-  .modal-button {
+  .modal-card .modal-button {
     width: 50%;
     height: 35px;
     border-radius: 10px;
@@ -71,25 +75,25 @@
   }
   
   /* Primary = delete */
-  .modal-button.primary {
+  .modal-card .modal-button.primary {
     background-color: rgb(255, 114, 109);
     color: white;
   }
-  .modal-button.primary:hover {
+  .modal-card .modal-button.primary:hover {
     background-color: rgb(255, 73, 66);
   }
   
   /* Secondary = cancel */
-  .modal-button.secondary {
+  .modal-card .modal-button.secondary {
     background-color: var(--color-border);
     color: var(--color-text-primary);
   }
-  .modal-button.secondary:hover {
+  .modal-card .modal-button.secondary:hover {
     background-color: var(--color-border-secondary);
   }
   
   /* Exit (X) button in top right */
-  .modal-exit-button {
+  .modal-card .modal-exit-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,14 +103,18 @@
     top: 20px;
     right: 20px;
     cursor: pointer;
+    z-index: 10;
+    width: 24px;
+    height: 24px;
   }
   
-  .modal-exit-button:hover svg {
+  .modal-card .modal-exit-button:hover svg {
     fill: var(--color-text-primary);
   }
   
-  .modal-exit-button svg {
+  .modal-card .modal-exit-button svg {
     fill: var(--color-text-secondary);
     height: 20px;
+    width: 20px;
   }
   
