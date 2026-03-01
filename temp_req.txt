@@ -1,0 +1,64 @@
+﻿# =====================
+# FastAPI dependencies
+# =====================
+fastapi>=0.104.0           # Web API framework
+uvicorn>=0.24.0            # ASGI server for FastAPI
+pydantic>=2.5.0            # Data validation/models (used by FastAPI)
+python-multipart           # File uploads (FastAPI)
+
+# =====================
+# Database dependencies
+# =====================
+sqlalchemy>=2.0.0          # ORM/database access
+alembic>=1.12.0            # Database migrations
+psycopg2>=2.9.0            # PostgreSQL driver
+pgvector>=0.2.0            # Vector similarity search for PostgreSQL
+
+# =====================
+# AI & ML dependencies
+# =====================
+openai>=1.12.0             # OpenAI API client
+langchain>=0.1.0           # LangChain for RAG pipeline
+langchain-openai>=0.0.5    # OpenAI integration for LangChain
+tiktoken>=0.5.0            # Tokenizer for OpenAI (install with --only-binary=all)
+# Note: Install numpy separately with: pip install --only-binary=all numpy
+python-dotenv>=1.0.0       # Environment variable management
+
+# =====================
+# Audio Processing & TTS
+# =====================
+# Note: Using OpenAI's Whisper API instead of local model (more reliable, no build issues)
+pydub==0.25.1              # Audio file processing
+elevenlabs>=0.2.0          # ElevenLabs TTS API for streaming audio
+
+# =====================
+# Caching & Rate Limiting
+# =====================
+redis==5.0.1               # Redis for caching and rate limiting
+slowapi==0.1.9             # Rate limiting for FastAPI
+
+# =====================
+# Scraping dependencies
+# =====================
+requests==2.32.4           # HTTP requests (API calls, scraping)
+extruct==0.18.0            # Web scraping metadata extraction
+
+# =====================
+# Authentication & Security
+# =====================
+passlib ==1.7.4                    # Password hashing (auth)
+python-jose                # JWTs (auth/authorization)
+cryptography               # Crypto primitives (used by python-jose, passlib)
+bcrypt==4.0.1                     # Password hashing algorithm (used by passlib)
+
+# =====================
+# Payment Processing
+# =====================
+stripe>=7.0.0              # Stripe API for payment processing
+
+# =====================
+# Utilities/Other
+# =====================
+# (Add any other general-purpose or utility libraries here)
+
+# to install: pip install -r requirements.txt (make sure in backend directory)
