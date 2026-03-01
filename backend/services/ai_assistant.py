@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import openai
 from dotenv import load_dotenv
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain.retrievers import ParentDocumentRetriever
 from langchain.schema import Document
 from langchain.schema.output_parser import StrOutputParser
