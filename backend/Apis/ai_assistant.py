@@ -97,7 +97,7 @@ async def start_cooking_session(
         logger.info(f"Found recipe: {recipe.title}")
 
         # Check if recipe has embeddings (if not, generate them asynchronously)
-        if not recipe.embedding is None or recipe.embedding.size == 0:
+        if recipe.embedding is None or getattr(recipe.embedding, "size", 0) == 0:
             logger.info(f"Generating embeddings for recipe {request.recipe_id}")
             try:
                 # Generate embeddings asynchronously to avoid blocking the session start
