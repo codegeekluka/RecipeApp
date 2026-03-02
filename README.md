@@ -1,6 +1,6 @@
 # Recipe App
 
-**Live app:** [Try it here](https://your-app.vercel.app) *(replace with your Vercel URL)*
+**Live app:** [Try it here] https://recipe-app-fawn-six.vercel.app/
 
 A modern recipe app with an **AI cooking assistant** you can talk to while you cook. Save recipes, plan meals, and get voice-powered help in the kitchen.
 
