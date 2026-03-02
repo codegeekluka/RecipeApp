@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from backend.database.database import SessionLocal, engine, get_db
 from backend.database.db_models import User
+from backend.services.seed_default_recipes import seed_default_recipes
 
 # Get the path to the .env file explicitly
 env_path = Path(__file__).resolve().parent.parent / "database" / ".env"
@@ -55,7 +56,8 @@ def create_user(db: Session, user: UserCreate):
     )  # adding new user
     db.add(db_user)
     db.commit()
-    return "complete"
+    db.refresh(db_user)
+    return db_user
 
 
 # to be able to call this we need a api endpoint, SEE auth notes in OneNote
@@ -65,7 +67,9 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
-    return create_user(db=db, user=user)
+    new_user = create_user(db=db, user=user)
+    seed_default_recipes(db, new_user.id)
+    return "complete"
 
 
 # Authenticate the user
